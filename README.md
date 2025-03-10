@@ -27,10 +27,40 @@ file, which you can then extract into its own directory and open as a project in
 ## I don't know why I'm here, I just want the default MDK
 See below for links to other MDK locations:
 
+### Other Templates:
 - NeoForge: https://github.com/NeoForgeMDKs
 - Forge: https://files.minecraftforge.net/net/minecraftforge/forge/
 - Fabric: https://fabricmc.net/develop/template/
 - Jared's Multiloader Template: https://github.com/jaredlll08/MultiLoader-Template
+- Idea Extensions: https://github.com/JetBrains/gradle-idea-ext-plugin/tags
+
+### Version Checking:
+#### General:
+- ModDevGradle: https://projects.neoforged.net/neoforged/moddevgradle
+- Parchment: https://parchmentmc.org/docs/getting-started
+- Gradle: https://gradle.org/releases/
+- Mixin: https://repo.spongepowered.org/service/rest/repository/browse/maven-public/org/spongepowered/mixin/
+- MixinExtras: https://github.com/LlamaLad7/MixinExtras/releases/latest
+
+#### NeoForge:
+- NeoForm: https://projects.neoforged.net/neoforged/neoform
+- NeoGradle: https://projects.neoforged.net/neoforged/neogradle
+- NeoForge: https://projects.neoforged.net/neoforged/neoforge
+
+#### Forge:
+- Forge: https://files.minecraftforge.net/net/minecraftforge/forge/
+- Jopt-simple: https://github.com/jopt-simple/jopt-simple/tags
+- ForgeGradle: https://files.minecraftforge.net/net/minecraftforge/gradle/ForgeGradle/
+- Librarian ForgeGradle: https://ldtteam.jfrog.io/ui/native/parchmentmc-public/org/parchmentmc/librarian/forgegradle/org.parchmentmc.librarian.forgegradle.gradle.plugin/
+- MixinGradle: https://repo.spongepowered.org/service/rest/repository/browse/maven-public/org/spongepowered/mixingradle/
+
+#### Fabric:
+- Fabric/FAPI: https://fabricmc.net/develop/
+- Loom: https://github.com/FabricMC/fabric-loom/releases/latest
+
+#### Publishing:
+- CurseForgeGradle: https://plugins.gradle.org/plugin/net.darkhax.curseforgegradle
+- Minotaur: https://github.com/modrinth/minotaur/releases/latest
 
 ## Disclaimer
 I do not offer any specific support for projects made from these templates.
