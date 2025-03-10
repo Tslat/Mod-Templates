@@ -24,17 +24,25 @@ Switch to the branch you want (depending on your project version and platform(s)
 button up on the top right. In the `Local` tab, click `Download Zip`. This will give you a copy of the branch as a zip
 file, which you can then extract into its own directory and open as a project in Intellij.
 
-## I don't know why I'm here, I just want the default MDK
+## Disclaimer
+I do not offer any specific support for projects made from these templates.
+
+See your usual modding support location if you are looking for support with any project using these templates
+(I'm probably there anyway)
+
+## I don't know why I'm here
+### I just want the default MDK
 See below for links to other MDK locations:
 
-### Other Templates:
 - NeoForge: https://github.com/NeoForgeMDKs
 - Forge: https://files.minecraftforge.net/net/minecraftforge/forge/
 - Fabric: https://fabricmc.net/develop/template/
 - Jared's Multiloader Template: https://github.com/jaredlll08/MultiLoader-Template
 - Idea Extensions: https://github.com/JetBrains/gradle-idea-ext-plugin/tags
 
-### Version Checking:
+### I just want to find links to versions
+See below for links to various version pages for modding resources:
+
 #### General:
 - ModDevGradle: https://projects.neoforged.net/neoforged/moddevgradle
 - Parchment: https://parchmentmc.org/docs/getting-started
@@ -61,9 +69,3 @@ See below for links to other MDK locations:
 #### Publishing:
 - CurseForgeGradle: https://plugins.gradle.org/plugin/net.darkhax.curseforgegradle
 - Minotaur: https://github.com/modrinth/minotaur/releases/latest
-
-## Disclaimer
-I do not offer any specific support for projects made from these templates.
-
-See your usual modding support location if you are looking for support with any project using these templates
-(I'm probably there anyway)
