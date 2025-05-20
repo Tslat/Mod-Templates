@@ -6,6 +6,9 @@ plugins {
 
 val modId: String by project
 
+if (modId != "mymod" && file("src/main/resources/mymod.mixins.json").exists())
+    throw IllegalStateException("You haven't renamed your mixins.json file to $modId.mixins.json yet!")
+
 neoForge {
     neoFormVersion = libs.versions.neoform.get()
     validateAccessTransformers = true
