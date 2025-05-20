@@ -26,7 +26,7 @@
 # Neoforge
     neoforge-loader-range           = "[5,)"
     neoforge-range                  = "[21.1.100,)"
-    neoforge                        = "21.1.169"
+    neoforge                        = "21.1.172"
 
 # Dependencies
     mixin                           = "0.8.7"
@@ -34,7 +34,7 @@
     mixinextras-range               = "[0.3.5,)"
 
 # Plugins
-    plugin-moddevgradle             = "2.0.86"
+    plugin-moddevgradle             = "2.0.88"
     plugin-minotaur                 = "2.8.7"
     plugin-curseforge-gradle        = "1.1.26"
     plugin-idea-ext                 = "1.1.10"
