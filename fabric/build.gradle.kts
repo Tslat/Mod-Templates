@@ -33,7 +33,7 @@ dependencies {
 }
 
 loom {
-    file("src/main/resources/$modId.accesswidener").takeIf { it.exists() }?.also {
+    file("src/main/resources/$modId.accesswidener").takeIf { it.exists() }?.let {
         accessWidenerPath.set(it)
     }?:takeIf { file("src/main/resources/$modId.accesswidener").exists() }?.run {
         throw IllegalStateException("You haven't renamed your `mymod.accesswidener` file to `$modId.accesswidener` yet!")
