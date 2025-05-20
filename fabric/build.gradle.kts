@@ -33,7 +33,11 @@ dependencies {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/$modId.accesswidener")
+    file("src/main/resources/$modId.accesswidener").takeIf { it.exists() }?.also {
+        accessWidenerPath.set(it)
+    }?:takeIf { file("src/main/resources/$modId.accesswidener").exists() }?.run {
+        throw IllegalStateException("You haven't renamed your `mymod.accesswidener` file to `$modId.accesswidener` yet!")
+    }
 
     mixin.defaultRefmapName.set("${modId}.refmap.json")
 
