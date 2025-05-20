@@ -65,9 +65,11 @@ modrinth {
     versionNumber.set(project.version.toString())
     versionName = "NeoForge ${libs.versions.minecraft.asProvider().get()}"
     uploadFile.set(tasks.named<Jar>("jar"))
-    changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
     gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
     loaders.set(listOf("neoforge"))
+
+    if (rootProject.file("CHANGELOG.md").exists())
+        changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
 
     // Comment out below to enable publishing properly
     debugMode = true
@@ -84,7 +86,9 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     mainFile.addModLoader("NeoForge")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
     mainFile.addJavaVersion("Java ${libs.versions.java}")
-    mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+
+    if (rootProject.file("CHANGELOG.md").exists())
+        mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
 
     // Comment out below to enable publishing properly
     debugMode = true
@@ -107,4 +111,3 @@ tasks.named<DefaultTask>("publish").configure {
     finalizedBy("modrinth")
     finalizedBy("publishToCurseForge")
 }
-

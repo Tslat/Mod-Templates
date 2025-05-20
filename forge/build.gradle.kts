@@ -125,9 +125,11 @@ modrinth {
     versionNumber.set(project.version.toString())
     versionName = "Forge ${libs.versions.minecraft.asProvider().get()}"
     uploadFile.set(tasks.jarJar)
-    changelog.set(rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8))
     gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
     loaders.set(listOf("forge"))
+
+    if (rootProject.file("CHANGELOG.md").exists())
+        changelog.set(rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8))
 
     // Comment out below to enable publishing properly
     debugMode = true
@@ -145,7 +147,9 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     mainFile.addModLoader("Forge")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
     mainFile.addJavaVersion("Java ${libs.versions.java}")
-    mainFile.changelog = rootProject.file("changelog.txt").readText(Charsets.UTF_8)
+
+    if (rootProject.file("CHANGELOG.md").exists())
+        mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
 
     // Comment out below to enable publishing properly
     debugMode = true
@@ -176,4 +180,3 @@ sourceSets.forEach {
     it.output.setResourcesDir(dir)
     it.java.destinationDirectory = dir
 }
-

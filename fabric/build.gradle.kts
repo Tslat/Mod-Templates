@@ -81,13 +81,15 @@ modrinth {
     versionNumber.set(project.version.toString())
     versionName = "Fabric ${libs.versions.minecraft.asProvider().get()}"
     uploadFile.set(tasks.named<RemapJarTask>("remapJar"))
-    changelog.set(rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8))
     gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
     versionType = "release"
     loaders.set(listOf("fabric"))
     dependencies {
         required.project("fabric-api")
     }
+
+    if (rootProject.file("CHANGELOG.md").exists())
+        changelog.set(rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8))
 
     // Comment out below to enable publishing properly
     debugMode = true
@@ -105,7 +107,9 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     mainFile.addModLoader("Fabric")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
     mainFile.addJavaVersion("Java ${libs.versions.java.get()}")
-    mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+
+    if (rootProject.file("CHANGELOG.md").exists())
+        mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
 
     // Comment out below to enable publishing properly
     debugMode = true
