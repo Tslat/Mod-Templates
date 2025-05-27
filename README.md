@@ -38,7 +38,6 @@ See below for links to other MDK locations:
 - Forge: https://files.minecraftforge.net/net/minecraftforge/forge/
 - Fabric: https://fabricmc.net/develop/template/
 - Jared's Multiloader Template: https://github.com/jaredlll08/MultiLoader-Template
-- Idea Extensions: https://github.com/JetBrains/gradle-idea-ext-plugin/tags
 
 ### I just want to find links to versions
 See below for links to various version pages for modding resources:
@@ -49,6 +48,7 @@ See below for links to various version pages for modding resources:
 - Gradle: https://gradle.org/releases/
 - Mixin: https://repo.spongepowered.org/service/rest/repository/browse/maven-public/org/spongepowered/mixin/
 - MixinExtras: https://github.com/LlamaLad7/MixinExtras/releases/latest
+- Idea Extensions: https://github.com/JetBrains/gradle-idea-ext-plugin/tags
 
 #### NeoForge:
 - NeoForm: https://projects.neoforged.net/neoforged/neoform
