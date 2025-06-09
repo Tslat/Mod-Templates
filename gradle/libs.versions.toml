@@ -14,7 +14,7 @@
 # Fabric
     fabric                          = "0.16.14"
     fabric-range                    = "0.16"
-    fabric-api                      = "0.116.0+1.21.1"
+    fabric-api                      = "0.116.1+1.21.1"
     fabric-api-range                = "0.115.0+1.21.1"
 
 # Forge
@@ -26,7 +26,7 @@
 # Neoforge
     neoforge-loader-range           = "[4,)"
     neoforge-range                  = "[21.1.100,)"
-    neoforge                        = "21.1.172"
+    neoforge                        = "21.1.176"
 
 # Dependencies
     mixin                           = "0.8.7"
@@ -34,11 +34,11 @@
     mixinextras-range               = "[0.3.5,)"
 
 # Plugins
-    plugin-moddevgradle             = "2.0.88"
+    plugin-moddevgradle             = "2.0.91"
     plugin-minotaur                 = "2.8.7"
     plugin-curseforge-gradle        = "1.1.26"
     plugin-idea-ext                 = "1.1.10"
-    plugin-forge-gradle             = "[6.0.24,6.2)"
+    plugin-forge-gradle             = "[6.0.36,6.2)"
     plugin-mixin                    = "0.7.+"
     plugin-parchment-forge-gradle   = "1.+"
     plugin-loom                     = "1.10-SNAPSHOT"
