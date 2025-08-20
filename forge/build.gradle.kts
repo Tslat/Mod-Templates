@@ -1,8 +1,9 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import net.minecraftforge.gradle.userdev.tasks.JarJar
+import org.gradle.internal.extensions.stdlib.capitalized
 
 plugins {
-    id("convention-plugin")
+    id("project-setup")
 
     alias(libs.plugins.minotaur)
     alias(libs.plugins.curseforgegradle)
@@ -17,50 +18,39 @@ jarJar.enable()
 
 minecraft {
     mappings("parchment", "${libs.versions.parchment.minecraft.get()}-${libs.versions.parchment.asProvider().get()}-${libs.versions.minecraft.asProvider().get()}")
-    accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+
+    file("src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
+        accessTransformer(it)
+    }
 
     reobf = false
     copyIdeResources = true
 
     runs {
-        create("client") {
-            workingDirectory(project.file("runs/" + name))
+        configureEach {
+            workingDirectory(project.file("runs/$name"))
             ideaModule("${rootProject.name}.${project.name}.main")
             isSingleInstance = true
-            taskName("runClient")
-            args("--username", "Dev")
+            args("-mixin.config=$modId.mixins.json")
 
             property("forge.logging.console.level", "debug")
             property("mixin.env.remapRefMap", "true")
-
             property("mixin.env.refMapRemappingFile", "${project.projectDir}/build/createSrgToMcp/output.srg")
-            args("-mixin.config=$modId.mixins.json")
 
-            mods {
-                create(modId) {
-                    source(sourceSets.getByName("main"))
-                    source(project(":common").sourceSets.getByName("main"))
-                }
+            mods.create(modId) {
+                source(sourceSets.main.get())
+                source(project(":common").sourceSets.main.get())
             }
         }
 
-        create("server") {
-            workingDirectory(project.file("runs/"+ name))
-            ideaModule("${rootProject.name}.${project.name}.main")
-            isSingleInstance = true
+        create("Forge Client") {
+            client(true)
+            taskName("runClient")
+            args("--username", "Dev")
+        }
+
+        create("Forge Server") {
             taskName("runServer")
-
-            property("forge.logging.console.level", "debug")
-            property("mixin.env.remapRefMap", "true")
-            property("mixin.env.refMapRemappingFile", "${project.projectDir}/build/createSrgToMcp/output.srg")
-            args("-mixin.config=$modId.mixins.json")
-
-            mods {
-                create(modId) {
-                    source(project(":common").sourceSets.main.get())
-                    source(sourceSets.main.get())
-                }
-            }
         }
     }
 }
@@ -82,6 +72,10 @@ dependencies {
     }
 
     implementation(libs.jopt.simple)
+
+    // Mod Dependencies below
+    //implementation(fg.deobf(modDeps.geckolib.forge))
+
 }
 
 tasks.named<Jar>("jar").configure {
@@ -93,11 +87,11 @@ tasks.named<JarJar>("jarJar").configure {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    source(project(":common").sourceSets.getByName("main").allSource)
+    source(project(":common").sourceSets.main.get().allSource)
 }
 
 tasks.named<Jar>("sourcesJar").configure {
-    from(project(":common").sourceSets.getByName("main").allSource)
+    from(project(":common").sourceSets.main.get().allSource)
 }
 
 tasks.named<DefaultTask>("assemble").configure {
@@ -105,20 +99,20 @@ tasks.named<DefaultTask>("assemble").configure {
 }
 
 tasks.withType<Javadoc>().configureEach {
-    source(project(":common").sourceSets.getByName("main").allJava)
+    source(project(":common").sourceSets.main.get().allJava)
 }
 
 tasks.withType<ProcessResources>().configureEach {
-    from(project(":common").sourceSets.getByName("main").resources)
+    from(project(":common").sourceSets.main.get().resources)
     exclude("**/accesstransformer-common.cfg")
 }
 
 mixin {
-    add(sourceSets.getByName("main"), "$modId.refmap.json")
+    add(sourceSets.main.get(), "$modId.refmap.json")
     config("$modId.mixins.json")
 }
 
-// Must have your Modrinth API Key as an environment variable
+// Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
     projectId.set(properties["modrinthProjectId"] as String)
@@ -137,7 +131,7 @@ modrinth {
     // https://github.com/modrinth/minotaur#available-properties
 }
 
-// Must have your CurseForge API Key as an environment variable
+// Must have your CurseForge API Key as an environment variable under 'CURSEFORGE_TOKEN'
 tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     group = "publishing"
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"

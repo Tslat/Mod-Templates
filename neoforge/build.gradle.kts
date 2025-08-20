@@ -1,7 +1,7 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
-    id("convention-plugin")
+    id("project-setup")
 
     alias(libs.plugins.minotaur)
     alias(libs.plugins.curseforgegradle)
@@ -13,16 +13,20 @@ val modId: String by project
 neoForge {
     version = libs.versions.neoforge.asProvider().get()
 
-    accessTransformers.files.setFrom(project(":common").file("src/main/resources/META-INF/accesstransformer-common.cfg"))
+    project(":common").file("src/main/resources/META-INF/accesstransformer-common.cfg").takeIf { it.exists() }?.let {
+        accessTransformers.files.setFrom(it)
+        validateAccessTransformers = true
+    }
+
     parchment.minecraftVersion.set(libs.versions.parchment.minecraft.get())
     parchment.mappingsVersion.set(libs.versions.parchment.asProvider().get())
 
     runs {
+        mods.create(modId).sourceSet(project.sourceSets.main.get())
+
         configureEach {
             logLevel = org.slf4j.event.Level.DEBUG
         }
-
-        mods.create(modId).sourceSet(project.sourceSets.getByName("main"))
 
         create("client") {
             client()
@@ -37,6 +41,10 @@ neoForge {
 
 dependencies {
     compileOnly(project(":common"))
+
+    // Mod Dependencies below
+    //implementation(modDeps.geckolib.neoforge)
+
 }
 
 tasks.withType<Test>().configureEach {
@@ -44,19 +52,19 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.named<JavaCompile>("compileJava").configure {
-    source(project(":common").sourceSets.getByName("main").allSource)
+    source(project(":common").sourceSets.main.get().allSource)
 }
 
 tasks.named<Jar>("sourcesJar").configure {
-    from(project(":common").sourceSets.getByName("main").allSource)
+    from(project(":common").sourceSets.main.get().allSource)
 }
 
 tasks.withType<Javadoc>().configureEach {
-    source(project(":common").sourceSets.getByName("main").allJava)
+    source(project(":common").sourceSets.main.get().allJava)
 }
 
 tasks.withType<ProcessResources>().configureEach {
-    from(project(":common").sourceSets.getByName("main").resources)
+    from(project(":common").sourceSets.main.get().resources)
 }
 
 modrinth {

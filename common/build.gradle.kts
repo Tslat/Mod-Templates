@@ -1,18 +1,18 @@
 plugins {
-    id("convention-plugin")
+    id("project-setup")
 
     alias(libs.plugins.moddevgradle)
 }
 
 val modId: String by project
 
-if (modId != "mymod" && file("src/main/resources/mymod.mixins.json").exists())
-    throw IllegalStateException("You haven't renamed your `mymod.mixins.json` file to $modId.mixins.json yet!")
-
 neoForge {
     neoFormVersion = libs.versions.neoform.get()
-    validateAccessTransformers = true
-    accessTransformers.files.setFrom("src/main/resources/META-INF/accesstransformer-common.cfg")
+
+    file("src/main/resources/META-INF/accesstransformer-common.cfg").takeIf { it.exists() }?.let {
+        accessTransformers.files.setFrom(it.path)
+        validateAccessTransformers = true
+    }
 
     parchment.minecraftVersion.set(libs.versions.parchment.minecraft.get())
     parchment.mappingsVersion.set(libs.versions.parchment.asProvider().get())
@@ -21,6 +21,10 @@ neoForge {
 dependencies {
     compileOnly(libs.mixin)
     compileOnly(libs.mixinextras.common)
+
+    // Mod Dependencies below
+    //implementation(modDeps.geckolib.common)
+
 }
 
 publishing {

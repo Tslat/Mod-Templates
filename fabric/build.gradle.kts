@@ -1,8 +1,9 @@
 import net.fabricmc.loom.task.RemapJarTask
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import org.gradle.internal.extensions.stdlib.capitalized
 
 plugins {
-    id("convention-plugin")
+    id("project-setup")
 
     alias(libs.plugins.minotaur)
     alias(libs.plugins.curseforgegradle)
@@ -10,16 +11,6 @@ plugins {
 }
 
 val modId: String by project
-
-repositories {
-    maven {
-        name = "ParchmentMC"
-        url = uri("https://maven.parchmentmc.org")
-        content {
-            includeGroupAndSubgroups("org.parchmentmc")
-        }
-    }
-}
 
 dependencies {
     minecraft(libs.minecraft)
@@ -30,55 +21,55 @@ dependencies {
     modImplementation(libs.fabric)
     modImplementation(libs.fabric.api)
     compileOnly(project(":common"))
+
+    // Mod Dependencies below
+    //modImplementation(modDeps.geckolib.fabric)
+
 }
 
 loom {
     file("src/main/resources/$modId.accesswidener").takeIf { it.exists() }?.let {
         accessWidenerPath.set(it)
-    }?:takeIf { file("src/main/resources/$modId.accesswidener").exists() }?.run {
-        throw IllegalStateException("You haven't renamed your `mymod.accesswidener` file to `$modId.accesswidener` yet!")
     }
 
     mixin.defaultRefmapName.set("${modId}.refmap.json")
 
     runs {
-        named("client") {
-            configName = "Fabric Client"
-
-            client()
+        configureEach {
+            runDir("runs/$name")
             ideConfigGenerated(true)
-            runDir("runs/" + name)
+            configName = "Fabric ${name.capitalized()}"
+        }
+
+        named("client") {
+            client()
             programArg("--username=Dev")
         }
 
         named("server") {
-            configName = "Fabric Server"
-
             server()
-            ideConfigGenerated(true)
-            runDir("runs/" + name)
         }
     }
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    source(project(":common").sourceSets.getByName("main").allSource)
+    source(project(":common").sourceSets.main.get().allSource)
 }
 
 tasks.named<Jar>("sourcesJar").configure {
-    from(project(":common").sourceSets.getByName("main").allSource)
+    from(project(":common").sourceSets.main.get().allSource)
 }
 
 tasks.withType<Javadoc>().configureEach {
-    source(project(":common").sourceSets.getByName("main").allJava)
+    source(project(":common").sourceSets.main.get().allJava)
 }
 
 tasks.withType<ProcessResources>().configureEach {
-   from(project(":common").sourceSets.getByName("main").resources)
+   from(project(":common").sourceSets.main.get().resources)
     exclude("**/accesstransformer-common.cfg")
 }
 
-// Must have your Modrinth API Key as an environment variable
+// Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
     projectId.set(properties["modrinthProjectId"] as String)
@@ -101,7 +92,7 @@ modrinth {
     // https://github.com/modrinth/minotaur#available-properties
 }
 
-// Must have your CurseForge API Key as an environment variable
+// Must have your CurseForge API Key as an environment variable under 'CURSEFORGE_TOKEN'
 tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     group = "publishing"
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
