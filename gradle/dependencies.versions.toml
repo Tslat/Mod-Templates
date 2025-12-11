@@ -1,5 +1,5 @@
 [versions]
-    #geckolib                       = "4.7.6"
+    #geckolib                       = "4.8.2"
 
 [libraries]
     #geckolib-common                = { group = "software.bernie.geckolib", name = "geckolib-common-1.21.1", version.ref = "geckolib" }
