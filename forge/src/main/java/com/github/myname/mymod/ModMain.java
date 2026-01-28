@@ -2,7 +2,7 @@ package com.github.myname.mymod;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -12,9 +12,9 @@ public class ModMain {
     public static final DeferredRegister<Item> ITEM_REGISTRY = DeferredRegister.create(Registries.ITEM, ModConstants.MODID);
 
     public ModMain(FMLJavaModLoadingContext context) {
-        final IEventBus modBus = context.getModEventBus();
+        final BusGroup busGroup = context.getModBusGroup();
 
-        ITEM_REGISTRY.register(modBus);
+        ITEM_REGISTRY.register(busGroup);
 
         ModCommon.init();
     }
