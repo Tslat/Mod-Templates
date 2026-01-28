@@ -11,7 +11,7 @@ plugins {
 val modId:          String by project
 val modDisplayName: String by project
 
-jarJar.register() {
+jarJar.register {
     archiveClassifier.set("")
 }
 
