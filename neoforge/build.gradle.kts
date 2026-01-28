@@ -1,4 +1,5 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import net.neoforged.moddevgradle.dsl.RunModel
 
 plugins {
     id("project-setup")
@@ -8,12 +9,13 @@ plugins {
     alias(libs.plugins.moddevgradle)
 }
 
-val modId: String by project
+val modId:          String by project
+val modDisplayName: String by project
 
 neoForge {
     version = libs.versions.neoforge.asProvider().get()
 
-    project(":common").file("src/main/resources/META-INF/accesstransformer-common.cfg").takeIf { it.exists() }?.let {
+    project(":common").file("src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
         accessTransformers.files.setFrom(it)
         validateAccessTransformers = true
     }
@@ -22,17 +24,23 @@ neoForge {
     parchment.mappingsVersion.set(libs.versions.parchment.asProvider().get())
 
     runs {
-        mods.create(modId).sourceSet(project.sourceSets.main.get())
-
         configureEach {
             logLevel = org.slf4j.event.Level.DEBUG
         }
 
-        create("client") {
+        mods.create(modId).sourceSet(project.sourceSets.main.get())
+
+        runConfig(this, "client") {
             client()
+            programArguments.addAll("--username", "Dev")
         }
 
-        create("server") {
+        runConfig(this, "client2") {
+            client()
+            programArguments.addAll("--username", "Player")
+        }
+
+        runConfig(this, "server") {
             server()
             programArgument("--nogui")
         }
@@ -45,26 +53,6 @@ dependencies {
     // Mod Dependencies below
     //implementation(modDeps.geckolib.neoforge)
 
-}
-
-tasks.withType<Test>().configureEach {
-    enabled = false;
-}
-
-tasks.named<JavaCompile>("compileJava").configure {
-    source(project(":common").sourceSets.main.get().allSource)
-}
-
-tasks.named<Jar>("sourcesJar").configure {
-    from(project(":common").sourceSets.main.get().allSource)
-}
-
-tasks.withType<Javadoc>().configureEach {
-    source(project(":common").sourceSets.main.get().allJava)
-}
-
-tasks.withType<ProcessResources>().configureEach {
-    from(project(":common").sourceSets.main.get().resources)
 }
 
 modrinth {
@@ -90,6 +78,7 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
     val mainFile = upload(properties["curseforgeProjectId"], tasks.jar)
+    mainFile.displayName = "$modDisplayName NeoForge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("NeoForge")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
@@ -118,4 +107,9 @@ publishing {
 tasks.named<DefaultTask>("publish").configure {
     finalizedBy("modrinth")
     finalizedBy("publishToCurseForge")
+}
+
+// Not explicitly needed; but due to Gradle's failure to provide kotlin-dsl reified types for NamedDomainObjectContainer, you'll get a bunch of IDE errors without it
+fun runConfig(container: NamedDomainObjectContainer<RunModel>, name: String, configuration: Action<RunModel>) {
+    configuration.execute(container.create(name));
 }

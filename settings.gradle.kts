@@ -1,41 +1,57 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven {
-            name = "Forge"
-            url = uri("https://maven.minecraftforge.net/")
-            content {
-                includeGroupAndSubgroups("net.minecraftforge")
+
+        // Fabric
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Fabric"
+                    url = uri("https://maven.fabricmc.net")
+                }
             }
-        }
-        maven {
-            name = "Fabric"
-            url = uri("https://maven.fabricmc.net/")
-            content {
+            filter {
                 includeGroupAndSubgroups("net.fabricmc")
                 includeGroup("fabric-loom")
             }
         }
-        maven {
-            name = "Parchment"
-            url = uri("https://maven.parchmentmc.org")
-            content {
-                includeGroupAndSubgroups("org.parchmentmc")
+
+        // NeoForge
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "NeoForge"
+                    url = uri("https://maven.neoforged.net/releases")
+                }
             }
-        }
-        maven {
-            name = "NeoForge"
-            url = uri("https://maven.neoforged.net/")
-            content {
+            filter {
                 includeGroupAndSubgroups("net.neoforged")
                 includeGroup("codechicken")
-                includeGroup("net.covers1624")
             }
         }
-        maven {
-            name = "Sponge"
-            url = uri("https://repo.spongepowered.org/repository/maven-public/")
-            content {
+
+        // Forge
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Forge"
+                    url = uri("https://maven.minecraftforge.net/")
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("net.minecraftforge")
+            }
+        }
+
+        // Mixin
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "SpongeForge"
+                    url = uri("https://repo.spongepowered.org/repository/maven-public")
+                }
+            }
+            filter {
                 includeGroupAndSubgroups("org.spongepowered")
             }
         }

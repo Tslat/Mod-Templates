@@ -1,3 +1,4 @@
+import net.darkhax.curseforgegradle.Constants
 import net.fabricmc.loom.task.RemapJarTask
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import org.gradle.internal.extensions.stdlib.capitalized
@@ -10,7 +11,8 @@ plugins {
     alias(libs.plugins.loom)
 }
 
-val modId: String by project
+val modId:          String by project
+val modDisplayName: String by project
 
 dependencies {
     minecraft(libs.minecraft)
@@ -28,11 +30,7 @@ dependencies {
 }
 
 loom {
-    file("src/main/resources/$modId.accesswidener").takeIf { it.exists() }?.let {
-        accessWidenerPath.set(it)
-    }
-
-    mixin.defaultRefmapName.set("${modId}.refmap.json")
+    file("src/main/resources/$modId.classtweaker").takeIf { it.exists() }?.let(accessWidenerPath::set)
 
     runs {
         configureEach {
@@ -52,21 +50,8 @@ loom {
     }
 }
 
-tasks.withType<JavaCompile>().configureEach {
-    source(project(":common").sourceSets.main.get().allSource)
-}
-
-tasks.named<Jar>("sourcesJar").configure {
-    from(project(":common").sourceSets.main.get().allSource)
-}
-
-tasks.withType<Javadoc>().configureEach {
-    source(project(":common").sourceSets.main.get().allJava)
-}
-
 tasks.withType<ProcessResources>().configureEach {
-   from(project(":common").sourceSets.main.get().resources)
-    exclude("**/accesstransformer-common.cfg")
+    exclude("**/accesstransformer.cfg")
 }
 
 // Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
@@ -98,10 +83,12 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
     val mainFile = upload(properties["curseforgeProjectId"], tasks.remapJar)
+    mainFile.displayName = "$modDisplayName Fabric ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("Fabric")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
-    mainFile.addJavaVersion("Java ${libs.versions.java.get()}")
+    mainFile.addJavaVersion("Java ${libs.versions.java}")
+    mainFile.addRelation("fabric-api", Constants.RELATION_REQUIRED)
 
     if (rootProject.file("CHANGELOG.md").exists())
         mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)

@@ -26,7 +26,7 @@
 	"mixins": [
 		"${mod_id}.mixins.json"
 	],
-	"accessWidener": "${mod_id}.accesswidener",
+	"accessWidener": "${mod_id}.classtweaker",
 	"depends": {
    		"fabricloader": ">=${fabric_loader_version_range}",
 		"fabric-api": ">=${fabric_api_version_range}",

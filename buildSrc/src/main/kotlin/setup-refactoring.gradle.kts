@@ -80,7 +80,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
         }
 
         if (fabricProject != null)
-            delete(fabricProject.projectDir.resolve("src/main/resources/mymod.accesswidener").path)
+            delete(fabricProject.projectDir.resolve("src/main/resources/mymod.classtweaker").path)
     }
     else {
         // Remove newly created directories
@@ -109,7 +109,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
         }
 
         if (fabricProject != null) {
-            delete(fabricProject.projectDir.resolve("src/main/resources/$modId.accesswidener").path)
+            delete(fabricProject.projectDir.resolve("src/main/resources/$modId.classtweaker").path)
 
             fabricProject.projectDir.resolve("src/main/resources/fabric.mod.json").takeIf(File::exists)?.let {
                 it.writeText(it.readText().replaceFirst("$group.$modId", "com.github.myname.mymod"))
@@ -207,7 +207,7 @@ private fun refactorModuleResources(root: File, module: String, group: String): 
     }
     else if (module == "fabric") {
         if (copied) {
-            root.resolve("mymod.accesswidener").takeIf(File::exists)?.let {
+            root.resolve("mymod.classtweaker").takeIf(File::exists)?.let {
                 copied = copy {
                     from(it)
                     into(root)
@@ -278,7 +278,7 @@ private fun isInitialUnmodifiedSetup(): Boolean {
         if (!fabricProject.projectDir.resolve("src/main/resources/fabric.mod.json").exists())
             return false
 
-        if (!fabricProject.projectDir.resolve("src/main/resources/mymod.accesswidener").exists())
+        if (!fabricProject.projectDir.resolve("src/main/resources/mymod.classtweaker").exists())
             return false
     }
 

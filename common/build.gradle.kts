@@ -9,7 +9,7 @@ val modId: String by project
 neoForge {
     neoFormVersion = libs.versions.neoform.get()
 
-    file("src/main/resources/META-INF/accesstransformer-common.cfg").takeIf { it.exists() }?.let {
+    file("src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
         accessTransformers.files.setFrom(it.path)
         validateAccessTransformers = true
     }
