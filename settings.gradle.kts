@@ -1,6 +1,7 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        mavenCentral()
 
         // Fabric
         exclusiveContent {
@@ -75,5 +76,5 @@ rootProject.name = "mymod"
 
 include("common")
 include("fabric")
-include("forge")
+//include("forge")
 include("neoforge")

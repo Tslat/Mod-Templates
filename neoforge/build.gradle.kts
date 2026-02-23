@@ -9,8 +9,8 @@ plugins {
     alias(libs.plugins.moddevgradle)
 }
 
-val modId:          String by project
-val modDisplayName: String by project
+val modId           : String by project
+val modDisplayName  : String by project
 
 neoForge {
     version = libs.versions.neoforge.asProvider().get()
@@ -19,9 +19,6 @@ neoForge {
         accessTransformers.files.setFrom(it)
         validateAccessTransformers = true
     }
-
-    parchment.minecraftVersion.set(libs.versions.parchment.minecraft.get())
-    parchment.mappingsVersion.set(libs.versions.parchment.asProvider().get())
 
     runs {
         configureEach {
@@ -52,17 +49,17 @@ dependencies {
 
     // Mod Dependencies below
     //implementation(modDeps.geckolib.neoforge)
-
 }
 
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
-    projectId.set(properties["modrinthProjectId"] as String)
-    versionNumber.set(project.version.toString())
-    versionName = "NeoForge ${libs.versions.minecraft.asProvider().get()}"
     uploadFile.set(tasks.named<Jar>("jar"))
-    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
+    projectId.set(properties["modrinthProjectId"] as String)
+    versionName = "NeoForge ${libs.versions.minecraft.asProvider().get()}"
+    versionType = "release"
     loaders.set(listOf("neoforge"))
+    versionNumber.set(project.version.toString())
+    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
 
     if (rootProject.file("CHANGELOG.md").exists())
         changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
@@ -83,9 +80,12 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     mainFile.addModLoader("NeoForge")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
     mainFile.addJavaVersion("Java ${libs.versions.java}")
+    mainFile.addEnvironment("Client", "Server")
 
-    if (rootProject.file("CHANGELOG.md").exists())
+    if (rootProject.file("CHANGELOG.md").exists()) {
         mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+        mainFile.changelogType = "markdown"
+    }
 
     // Comment out below to enable publishing properly
     debugMode = true

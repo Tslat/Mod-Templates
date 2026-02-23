@@ -13,9 +13,6 @@ neoForge {
         accessTransformers.files.setFrom(it.path)
         validateAccessTransformers = true
     }
-
-    parchment.minecraftVersion.set(libs.versions.parchment.minecraft.get())
-    parchment.mappingsVersion.set(libs.versions.parchment.asProvider().get())
 }
 
 dependencies {
@@ -24,7 +21,6 @@ dependencies {
 
     // Mod Dependencies below
     //implementation(modDeps.geckolib.common)
-
 }
 
 publishing {

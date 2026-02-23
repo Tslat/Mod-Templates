@@ -1,8 +1,8 @@
 [versions]
-    #geckolib                       = "4.8.2"
+    #geckolib                       = "5.5"
 
 [libraries]
-    #geckolib-common                = { group = "software.bernie.geckolib", name = "geckolib-common-1.21.1", version.ref = "geckolib" }
-    #geckolib-neoforge              = { group = "software.bernie.geckolib", name = "geckolib-neoforge-1.21.1", version.ref = "geckolib" }
-    #geckolib-fabric                = { group = "software.bernie.geckolib", name = "geckolib-fabric-1.21.1", version.ref = "geckolib" }
-    #geckolib-forge                 = { group = "software.bernie.geckolib", name = "geckolib-forge-1.21.1", version.ref = "geckolib" }
+    #geckolib-common                = { group = "software.bernie.geckolib", name = "geckolib-common-26.1", version.ref = "geckolib" }
+    #geckolib-neoforge              = { group = "software.bernie.geckolib", name = "geckolib-neoforge-26.1", version.ref = "geckolib" }
+    #geckolib-fabric                = { group = "software.bernie.geckolib", name = "geckolib-fabric-26.1", version.ref = "geckolib" }
+    #geckolib-forge                 = { group = "software.bernie.geckolib", name = "geckolib-forge-26.1", version.ref = "geckolib" }

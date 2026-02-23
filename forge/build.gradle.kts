@@ -1,3 +1,5 @@
+import net.minecraftforge.jarjar.gradle.JarJar
+
 plugins {
     id("project-setup")
 
@@ -8,8 +10,8 @@ plugins {
     alias(libs.plugins.forge.at)
 }
 
-val modId:          String by project
-val modDisplayName: String by project
+val modId           : String by project
+val modDisplayName  : String by project
 
 jarJar.register {
     archiveClassifier.set("")
@@ -22,21 +24,19 @@ minecraft {
         configureEach {
             workingDir.convention(layout.projectDirectory.dir("runs/${name}"))
             systemProperty("forge.logging.console.level", "debug")
+
+            args("-mixin.config=${modId}.mixins.json")
         }
 
         register("client") {
             args("--username", "Dev")
-            args("-mixin.config=${modId}.mixins.json")
         }
 
         register("client2") {
             args("--username", "Dev2")
-            args("-mixin.config=${modId}.mixins.json")
         }
 
-        register("server") {
-            args("-mixin.config=${modId}.mixins.json")
-        }
+        register("server")
     }
 }
 
@@ -71,7 +71,6 @@ dependencies {
 
     // Mod Dependencies below
     //implementation(fg.deobf(modDeps.geckolib.forge))
-
 }
 
 tasks.named<Jar>("jar").configure {
@@ -83,44 +82,48 @@ tasks.named<DefaultTask>("assemble").configure {
 }
 
 // Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
-//modrinth {
-//    token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
-//    projectId.set(properties["modrinthProjectId"] as String)
-//    versionNumber.set(project.version.toString())
-//    versionName = "Forge ${libs.versions.minecraft.asProvider().get()}"
-//    uploadFile.set(tasks.named<Jar>("jar"))
-//    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
-//    loaders.set(listOf("forge"))
-//
-//    if (rootProject.file("CHANGELOG.md").exists())
-//        changelog.set(rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8))
-//
-//    // Comment out below to enable publishing properly
-//    debugMode = true
-//    // See below for other properties and info
-//    // https://github.com/modrinth/minotaur#available-properties
-//}
-//
-//// Must have your CurseForge API Key as an environment variable under 'CURSEFORGE_TOKEN'
-//tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
-//    group = "publishing"
-//    apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
-//
-//    val mainFile = upload(properties["curseforgeProjectId"], tasks.named<Jar>("jar"))
-//    mainFile.displayName = "$modDisplayName Forge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
-//    mainFile.releaseType = "release"
-//    mainFile.addModLoader("Forge")
-//    mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
-//    mainFile.addJavaVersion("Java ${libs.versions.java}")
-//
-//    if (rootProject.file("CHANGELOG.md").exists())
-//        mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
-//
-//    // Comment out below to enable publishing properly
-//    debugMode = true
-//    // See below for other properties and info
-//    // https://github.com/Darkhax/CurseForgeGradle#available-properties
-//}
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
+    uploadFile.set(tasks.named<JarJar>("jarJar"))
+    projectId.set(properties["modrinthProjectId"] as String)
+    versionName = "Forge ${libs.versions.minecraft.asProvider().get()}"
+    versionType = "release"
+    loaders.set(listOf("forge"))
+    versionNumber.set(project.version.toString())
+    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
+
+    if (rootProject.file("CHANGELOG.md").exists())
+        changelog.set(rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8))
+
+    // Comment out below to enable publishing properly
+    debugMode = true
+    // See below for other properties and info
+    // https://github.com/modrinth/minotaur#available-properties
+}
+
+// Must have your CurseForge API Key as an environment variable under 'CURSEFORGE_TOKEN'
+tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
+    group = "publishing"
+    apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
+
+    val mainFile = upload(properties["curseforgeProjectId"], tasks.named<JarJar>("jarJar"))
+    mainFile.displayName = "$modDisplayName Forge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
+    mainFile.releaseType = "release"
+    mainFile.addModLoader("Forge")
+    mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
+    mainFile.addJavaVersion("Java ${libs.versions.java}")
+    mainFile.addEnvironment("Client", "Server")
+
+    if (rootProject.file("CHANGELOG.md").exists()) {
+        mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+        mainFile.changelogType = "markdown"
+    }
+
+    // Comment out below to enable publishing properly
+    debugMode = true
+    // See below for other properties and info
+    // https://github.com/Darkhax/CurseForgeGradle#available-properties
+}
 
 publishing {
     publishing {

@@ -11,22 +11,17 @@ plugins {
     alias(libs.plugins.loom)
 }
 
-val modId:          String by project
-val modDisplayName: String by project
+val modId           : String by project
+val modDisplayName  : String by project
 
 dependencies {
     minecraft(libs.minecraft)
-    mappings(loom.layered() {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.minecraft.get()}:${libs.versions.parchment.asProvider().get()}@zip")
-    })
-    modImplementation(libs.fabric)
-    modImplementation(libs.fabric.api)
+    implementation(libs.fabric)
+    implementation(libs.fabric.api)
     compileOnly(project(":common"))
 
     // Mod Dependencies below
-    //modImplementation(modDeps.geckolib.fabric)
-
+    //implementation(modDeps.geckolib.fabric)
 }
 
 loom {
@@ -57,13 +52,13 @@ tasks.withType<ProcessResources>().configureEach {
 // Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
+    uploadFile.set(tasks.jar)
     projectId.set(properties["modrinthProjectId"] as String)
-    versionNumber.set(project.version.toString())
     versionName = "Fabric ${libs.versions.minecraft.asProvider().get()}"
-    uploadFile.set(tasks.named<RemapJarTask>("remapJar"))
-    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
     versionType = "release"
     loaders.set(listOf("fabric"))
+    versionNumber.set(project.version.toString())
+    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
     dependencies {
         required.project("fabric-api")
     }
@@ -82,16 +77,19 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     group = "publishing"
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
-    val mainFile = upload(properties["curseforgeProjectId"], tasks.remapJar)
+    val mainFile = upload(properties["curseforgeProjectId"], tasks.jar)
     mainFile.displayName = "$modDisplayName Fabric ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("Fabric")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
     mainFile.addJavaVersion("Java ${libs.versions.java}")
     mainFile.addRelation("fabric-api", Constants.RELATION_REQUIRED)
+    mainFile.addEnvironment("Client", "Server")
 
-    if (rootProject.file("CHANGELOG.md").exists())
+    if (rootProject.file("CHANGELOG.md").exists()) {
         mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+        mainFile.changelogType = "markdown"
+    }
 
     // Comment out below to enable publishing properly
     debugMode = true
