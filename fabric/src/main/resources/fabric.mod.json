@@ -20,7 +20,7 @@
 			"com.github.myname.mymod.ModMain"
 		],
 		"client": [
-          "com.github.myname.mymod.client.ModClientMain"
+			"com.github.myname.mymod.client.FabricClient"
 		]
 	},
 	"mixins": [

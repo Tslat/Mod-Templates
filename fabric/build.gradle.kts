@@ -49,6 +49,7 @@ tasks.withType<ProcessResources>().configureEach {
     exclude("**/accesstransformer.cfg")
 }
 
+//<editor-fold defaultstate="collapsed" desc="<Publishing>">
 // Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
@@ -110,3 +111,4 @@ tasks.named<DefaultTask>("publish").configure {
     finalizedBy("modrinth")
     finalizedBy("publishToCurseForge")
 }
+//</editor-fold>

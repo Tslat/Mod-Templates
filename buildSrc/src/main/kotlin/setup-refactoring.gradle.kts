@@ -196,7 +196,6 @@ private fun refactorModuleResources(root: File, module: String, group: String): 
                 copied = copy {
                     from(it).filter { it ->
                         it.replace("com.github.myname.mymod", "$group.$modId")
-                            .replaceFirst("mymod.refmap.json", "$modId.refmap.json")
                     }
 
                     into(root)

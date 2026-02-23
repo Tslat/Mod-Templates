@@ -4,18 +4,25 @@ repositories {
     // Standard maven repository - this one for GeckoLib
     //mavenRepo("Geckolib",
     //    "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/",
-    //    "software.bernie.geckolib")
+    //    "com.geckolib")
 
-    mavenRepo("ParchmentMC",
-        "https://maven.parchmentmc.org",
-        "org.parchmentmc", "org.parchmentmc.data")
+    // CurseMaven repository, for artifacts posted on CurseForge that
+    // DO NOT have an official maven repository.
+    // See: https://cursemaven.com
+    //mavenRepo("CurseMaven/CurseForge",
+    //    "https://cursemaven.com",
+    //    "curse.maven")
 
     // A basic folder, in your root project location
     // Used for pre-compiled jars that don't have an online repository
     //folder("libs")
+
+    // The local maven repository, for locally published artifacts
+    //mavenLocal()
 }
 
 
+//<editor-fold defaultstate="collapsed" desc="<Boilerplate>">
 /**
  * Standard Maven repository
  *
@@ -68,3 +75,4 @@ fun RepositoryHandler.mavenCentral(vararg groups: String) {
         }
     }
 }
+//</editor-fold>

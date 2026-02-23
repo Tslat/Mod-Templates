@@ -51,6 +51,7 @@ dependencies {
     //implementation(modDeps.geckolib.neoforge)
 }
 
+//<editor-fold defaultstate="collapsed" desc="<Publishing>">
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
     uploadFile.set(tasks.named<Jar>("jar"))
@@ -108,6 +109,7 @@ tasks.named<DefaultTask>("publish").configure {
     finalizedBy("modrinth")
     finalizedBy("publishToCurseForge")
 }
+//</editor-fold>
 
 // Not explicitly needed; but due to Gradle's failure to provide kotlin-dsl reified types for NamedDomainObjectContainer, you'll get a bunch of IDE errors without it
 fun runConfig(container: NamedDomainObjectContainer<RunModel>, name: String, configuration: Action<RunModel>) {

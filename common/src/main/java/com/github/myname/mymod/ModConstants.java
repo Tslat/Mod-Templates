@@ -7,11 +7,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ServiceLoader;
 
-/**
- * Mod constants class.
- * <p>
- * All the mod's shared static instances are stored here
- */
+/// Mod constants class.
+///
+/// All the mod's shared static instances are stored here
 public final class ModConstants {
     public static final String MODID = "mymod";
     public static final Logger LOGGER = LogManager.getLogger(MODID);
@@ -21,9 +19,7 @@ public final class ModConstants {
 
     public static void init() {}
 
-    /**
-     * Create a new {@link Identifier} with this mod's namespace
-     */
+    /// Create a new [Identifier] with this mod's namespace
     public static Identifier id(String path) {
         return BASE_ID.withPath(path);
     }

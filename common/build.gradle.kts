@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.moddevgradle)
 }
 
-val modId: String by project
+val modId           : String by project
 
 neoForge {
     neoFormVersion = libs.versions.neoform.get()
@@ -23,6 +23,7 @@ dependencies {
     //implementation(modDeps.geckolib.common)
 }
 
+//<editor-fold defaultstate="collapsed" desc="<Publishing>">
 publishing {
     publishing {
         publications {
@@ -33,3 +34,4 @@ publishing {
         }
     }
 }
+//</editor-fold>

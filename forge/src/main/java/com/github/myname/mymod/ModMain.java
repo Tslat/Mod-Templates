@@ -7,14 +7,18 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 
+/// Initializer class for Forge-specific setup tasks
 @Mod(ModConstants.MODID)
-public class ModMain {
+public final class ModMain {
     public static final DeferredRegister<Item> ITEM_REGISTRY = DeferredRegister.create(Registries.ITEM, ModConstants.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITY_REGISTRY = DeferredRegister.create(Registries.ENTITY_TYPE, ModConstants.MODID);
 
     public ModMain(FMLJavaModLoadingContext context) {
         final BusGroup busGroup = context.getModBusGroup();
 
         ITEM_REGISTRY.register(busGroup);
+        ENTITY_REGISTRY.register(modBus);
+        modBus.<EntityAttributeCreationEvent>addListener(event -> ModEntities.registerEntityAttributes(event::put));
 
         ModCommon.init();
     }
