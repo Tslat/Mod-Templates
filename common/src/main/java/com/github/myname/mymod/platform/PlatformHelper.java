@@ -2,6 +2,7 @@ package com.github.myname.mymod.platform;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;
@@ -13,4 +14,7 @@ public interface PlatformHelper {
 
     /// Register a new entity
     <T extends Entity> Supplier<EntityType<T>> registerEntity(String id, Supplier<EntityType<T>> entityType);
+
+    /// Create a new [CreativeModeTab.Builder] instance, patched by the modloader
+    CreativeModeTab.Builder newCreativeTabBuilder();
 }

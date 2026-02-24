@@ -26,6 +26,11 @@ public final class ModItems {
     }
 
     /// Register an item
+    private static <T extends Item> Supplier<T> register(String id, Function<Item.Properties, T> itemFactory) {
+        return register(id, () -> itemFactory.apply(new Item.Properties()));
+    }
+
+    /// Register an item
     private static <T extends Item> Supplier<T> register(String id, Function<Item.Properties, T> itemFactory, UnaryOperator<Item.Properties> properties) {
         return register(id, () -> itemFactory.apply(properties.apply(new Item.Properties())));
     }

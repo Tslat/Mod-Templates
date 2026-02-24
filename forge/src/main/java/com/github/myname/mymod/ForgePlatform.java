@@ -16,4 +16,9 @@ public final class ForgePlatform implements PlatformHelper {
     public <T extends Entity> Supplier<EntityType<T>> registerEntity(String id, Supplier<EntityType<T>> entityType) {
         return ModMain.ENTITY_REGISTRY.register(id, entityType);
     }
+
+    @Override
+    public CreativeModeTab.Builder newCreativeTabBuilder() {
+        return CreativeModeTab.builder();
+    }
 }

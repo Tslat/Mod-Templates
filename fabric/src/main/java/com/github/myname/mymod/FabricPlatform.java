@@ -1,10 +1,12 @@
 package com.github.myname.mymod;
 
 import com.github.myname.mymod.platform.PlatformHelper;
+import net.fabricmc.fabric.impl.creativetab.FabricCreativeModeTabBuilderImpl;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;
@@ -23,5 +25,10 @@ public final class FabricPlatform implements PlatformHelper {
         final EntityType<T> registeredEntity = Registry.register(BuiltInRegistries.ENTITY_TYPE, ModConstants.id(id), entityType.get());
 
         return () -> registeredEntity;
+    }
+
+    @Override
+    public CreativeModeTab.Builder newCreativeTabBuilder() {
+        return new FabricCreativeModeTabBuilderImpl();
     }
 }
