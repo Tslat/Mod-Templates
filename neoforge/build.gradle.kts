@@ -48,7 +48,7 @@ dependencies {
     compileOnly(project(":common"))
 
     // Mod Dependencies below
-    //implementation(modDeps.geckolib.neoforge)
+    //implementation(libs.geckolib.neoforge)
 }
 
 //<editor-fold defaultstate="collapsed" desc="<Publishing>">

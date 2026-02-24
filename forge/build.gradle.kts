@@ -1,3 +1,4 @@
+import gradle.kotlin.dsl.accessors._13c7bbbc23d2ab41b247cc58dd914463.versionCatalogs
 import net.minecraftforge.jarjar.gradle.JarJar
 
 plugins {
@@ -70,7 +71,7 @@ dependencies {
     annotationProcessor(libs.forge.eventbusvalidator)
 
     // Mod Dependencies below
-    //implementation(fg.deobf(modDeps.geckolib.forge))
+    //implementation(fg.deobf(libs.geckolib.forge))
 }
 
 tasks.named<Jar>("jar").configure {

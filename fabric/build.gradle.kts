@@ -1,5 +1,4 @@
 import net.darkhax.curseforgegradle.Constants
-import net.fabricmc.loom.task.RemapJarTask
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import org.gradle.internal.extensions.stdlib.capitalized
 
@@ -21,7 +20,7 @@ dependencies {
     compileOnly(project(":common"))
 
     // Mod Dependencies below
-    //implementation(modDeps.geckolib.fabric)
+    //implementation(libs.geckolib.fabric)
 }
 
 loom {

@@ -59,14 +59,6 @@ pluginManagement {
     }
 }
 
-dependencyResolutionManagement {
-    versionCatalogs {
-        create ("modDeps") {
-            from(files("gradle/dependencies.versions.toml"))
-        }
-    }
-}
-
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }

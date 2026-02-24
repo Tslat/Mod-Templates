@@ -2,6 +2,9 @@
 # Mod
     mod                             = "1.0.0"
 
+# Dependencies
+    #geckolib                       = "5.5"
+
 # Common
     minecraft-range                 = "[26.1,)"
     minecraft                       = "26.1-snapshot-7"
@@ -45,6 +48,12 @@
 # https://docs.gradle.org/current/userguide/version_catalogs.html
 
 [libraries]
+# Dependencies
+    #geckolib-common                = { group = "com.geckolib", name = "geckolib-common-26.1", version.ref = "geckolib" }
+    #geckolib-neoforge              = { group = "com.geckolib", name = "geckolib-neoforge-26.1", version.ref = "geckolib" }
+    #geckolib-fabric                = { group = "com.geckolib", name = "geckolib-fabric-26.1", version.ref = "geckolib" }
+    #geckolib-forge                 = { group = "com.geckolib", name = "geckolib-forge-26.1", version.ref = "geckolib" }
+
 # Mixin
     mixin                   = { group = "org.spongepowered",        name = "mixin",                 version.ref = "mixin" }
     mixinextras-common      = { group = "io.github.llamalad7",      name = "mixinextras-common",    version.ref = "mixinextras" }

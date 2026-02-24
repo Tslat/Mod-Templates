@@ -6,9 +6,8 @@ plugins {
     id("repositories")
 }
 
-val libs = project.versionCatalogs.find("libs")!!
-val modDeps = project.versionCatalogs.find("modDeps")!!
-version = getVersion("mod")
+val libs    = project.versionCatalogs.find("libs")
+version     = getVersion("mod")
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(getVersion("java"))
@@ -184,8 +183,4 @@ gradle.projectsEvaluated {
 
 fun getVersion(versionName: String): String {
     return libs.get().findVersion(versionName).get().requiredVersion
-}
-
-fun getModDepVersion(versionName: String): String {
-    return modDeps.get().findVersion(versionName).get().requiredVersion
 }
