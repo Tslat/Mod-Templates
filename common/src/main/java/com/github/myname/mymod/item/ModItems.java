@@ -1,6 +1,8 @@
 package com.github.myname.mymod.item;
 
 import com.github.myname.mymod.ModConstants;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 
 import java.util.function.Function;
@@ -17,22 +19,22 @@ public final class ModItems {
     //<editor-fold defaultstate="collapsed" desc="<Registration Methods>">
     /// Register a basic [Item]
     private static Supplier<Item> registerBasic(String id) {
-        return register(id, () -> new Item(new Item.Properties()));
+        return registerBasic(id, new Item.Properties());
     }
 
     /// Register a basic [Item] with custom [Item.Properties]
     private static Supplier<Item> registerBasic(String id, Item.Properties properties) {
-        return register(id, () -> new Item(properties));
+        return register(id, () -> new Item(properties.setId(ResourceKey.create(Registries.ITEM, ModConstants.id(id)))));
     }
 
     /// Register an item
     private static <T extends Item> Supplier<T> register(String id, Function<Item.Properties, T> itemFactory) {
-        return register(id, () -> itemFactory.apply(new Item.Properties()));
+        return register(id, itemFactory, UnaryOperator.identity());
     }
 
     /// Register an item
     private static <T extends Item> Supplier<T> register(String id, Function<Item.Properties, T> itemFactory, UnaryOperator<Item.Properties> properties) {
-        return register(id, () -> itemFactory.apply(properties.apply(new Item.Properties())));
+        return register(id, () -> itemFactory.apply(properties.apply(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, ModConstants.id(id))))));
     }
 
     /// Register an item
