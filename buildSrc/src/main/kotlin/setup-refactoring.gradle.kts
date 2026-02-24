@@ -112,7 +112,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
             delete(fabricProject.projectDir.resolve("src/main/resources/$modId.classtweaker").path)
 
             fabricProject.projectDir.resolve("src/main/resources/fabric.mod.json").takeIf(File::exists)?.let {
-                it.writeText(it.readText().replaceFirst("$group.$modId", "com.github.myname.mymod"))
+                it.writeText(it.readText().replace("$group.$modId", "com.github.myname.mymod"))
             }
         }
     }
@@ -217,7 +217,7 @@ private fun refactorModuleResources(root: File, module: String, group: String): 
 
         if (copied) {
             root.resolve("fabric.mod.json").takeIf(File::exists)?.let {
-                it.writeText(it.readText().replaceFirst("com.github.myname.mymod", "$group.$modId"))
+                it.writeText(it.readText().replace("com.github.myname.mymod", "$group.$modId"))
             }
         }
     }
