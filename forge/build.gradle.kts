@@ -1,4 +1,3 @@
-import gradle.kotlin.dsl.accessors._13c7bbbc23d2ab41b247cc58dd914463.versionCatalogs
 import net.minecraftforge.jarjar.gradle.JarJar
 
 plugins {
