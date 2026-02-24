@@ -14,7 +14,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-/// The mod's registered items
+/// The mod's registered entities
 public final class ModEntities {
     public static void init() {}
 
