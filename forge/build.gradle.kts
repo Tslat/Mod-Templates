@@ -62,8 +62,10 @@ repositories {
 dependencies {
     implementation(minecraft.dependency(libs.forge))
     compileOnly(project(":common")) {
-        accessTransformers.configure(this) {
-            config.set(rootProject.file("common/src/main/resources/META-INF/accesstransformer.cfg"))
+        rootProject.file("common/src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
+            accessTransformers.configure(this) {
+                config.set(it)
+            }
         }
     }
 
