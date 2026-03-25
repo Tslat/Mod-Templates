@@ -82,7 +82,7 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     mainFile.releaseType = "release"
     mainFile.addModLoader("Fabric")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
-    mainFile.addJavaVersion("Java ${libs.versions.java}")
+    mainFile.addJavaVersion("Java ${libs.versions.java.get()}")
     mainFile.addRelation("fabric-api", Constants.RELATION_REQUIRED)
     mainFile.addEnvironment("Client", "Server")
 

@@ -80,7 +80,7 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     mainFile.releaseType = "release"
     mainFile.addModLoader("NeoForge")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
-    mainFile.addJavaVersion("Java ${libs.versions.java}")
+    mainFile.addJavaVersion("Java ${libs.versions.java.get()}")
     mainFile.addEnvironment("Client", "Server")
 
     if (rootProject.file("CHANGELOG.md").exists()) {
