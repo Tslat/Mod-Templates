@@ -63,10 +63,9 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-// Keep this lowercase, without spaces or symbols
 rootProject.name = "mymod"
 
 include("common")
 include("fabric")
-//include("forge")
+include("forge")
 include("neoforge")

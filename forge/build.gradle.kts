@@ -1,4 +1,5 @@
 import net.minecraftforge.jarjar.gradle.JarJar
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
     id("project-setup")
@@ -18,8 +19,6 @@ jarJar.register {
 }
 
 minecraft {
-    mappings("parchment", "${libs.versions.parchment.minecraft.get()}-${libs.versions.parchment.asProvider().get()}")
-
     runs {
         configureEach {
             workingDir.convention(layout.projectDirectory.dir("runs/${name}"))
