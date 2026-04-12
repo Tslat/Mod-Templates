@@ -60,7 +60,7 @@ See below for links to various version pages for modding resources:
 - Jopt-simple: https://github.com/jopt-simple/jopt-simple/tags
 - ForgeGradle: https://files.minecraftforge.net/net/minecraftforge/forgegradle/index.html
 - Forge AccessTransformers: https://files.minecraftforge.net/net/minecraftforge/accesstransformers-gradle/index.html
-- Forge EventBus: https://files.minecraftforge.net/net/minecraftforge/forgegradle/index.html
+- Forge EventBus: https://files.minecraftforge.net/net/minecraftforge/eventbus/index_default.html
 - Librarian ForgeGradle: https://ldtteam.jfrog.io/ui/native/parchmentmc-public/org/parchmentmc/librarian/forgegradle/org.parchmentmc.librarian.forgegradle.gradle.plugin/
 - MixinGradle: https://repo.spongepowered.org/service/rest/repository/browse/maven-public/org/spongepowered/mixingradle/
 
