@@ -84,7 +84,7 @@ dependencies {
     "jarJar"(libs.mixinextras.forge)
 
     // Mod Dependencies below
-    //implementation(fg.deobf(libs.geckolib.forge))
+    //implementation(libs.geckolib.forge)
 
 }
 
