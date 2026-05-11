@@ -23,10 +23,11 @@ dependencies {
     compileOnly(libs.mixinextras.common)
 
     // Mod Dependencies below
-    //implementation(modDeps.geckolib.common)
+    //implementation(libs.geckolib.common)
 
 }
 
+//<editor-fold defaultstate="collapsed" desc="<Publishing>">
 publishing {
     publishing {
         publications {
@@ -37,3 +38,4 @@ publishing {
         }
     }
 }
+//</editor-fold>

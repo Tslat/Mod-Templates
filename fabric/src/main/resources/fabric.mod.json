@@ -17,10 +17,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.github.myname.mymod.ModMain"
+          "io.github.myname.mymod.ModMain"
 		],
 		"client": [
-          "com.github.myname.mymod.client.ModClientMain"
+          "io.github.myname.mymod.client.ModClientMain"
 		]
 	},
 	"mixins": [

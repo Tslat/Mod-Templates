@@ -43,38 +43,20 @@ dependencies {
     compileOnly(project(":common"))
 
     // Mod Dependencies below
-    //implementation(modDeps.geckolib.neoforge)
+    //implementation(libs.geckolib.neoforge)
 
 }
 
-tasks.withType<Test>().configureEach {
-    enabled = false;
-}
-
-tasks.named<JavaCompile>("compileJava").configure {
-    source(project(":common").sourceSets.main.get().allSource)
-}
-
-tasks.named<Jar>("sourcesJar").configure {
-    from(project(":common").sourceSets.main.get().allSource)
-}
-
-tasks.withType<Javadoc>().configureEach {
-    source(project(":common").sourceSets.main.get().allJava)
-}
-
-tasks.withType<ProcessResources>().configureEach {
-    from(project(":common").sourceSets.main.get().resources)
-}
-
+//<editor-fold defaultstate="collapsed" desc="<Publishing>">
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
-    projectId.set(properties["modrinthProjectId"] as String)
-    versionNumber.set(project.version.toString())
-    versionName = "NeoForge ${libs.versions.minecraft.asProvider().get()}"
     uploadFile.set(tasks.named<Jar>("jar"))
-    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
+    projectId.set(properties["modrinthProjectId"] as String)
+    versionName = "NeoForge ${libs.versions.minecraft.asProvider().get()}"
+    versionType = "release"
     loaders.set(listOf("neoforge"))
+    versionNumber.set(project.version.toString())
+    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
 
     if (rootProject.file("CHANGELOG.md").exists())
         changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
@@ -90,13 +72,17 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
     val mainFile = upload(properties["curseforgeProjectId"], tasks.jar)
+    mainFile.displayName = "${properties["modDisplayName"]} NeoForge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("NeoForge")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
     mainFile.addJavaVersion("Java ${libs.versions.java}")
+    mainFile.addEnvironment("Client", "Server")
 
-    if (rootProject.file("CHANGELOG.md").exists())
+    if (rootProject.file("CHANGELOG.md").exists()) {
         mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+        mainFile.changelogType = "markdown"
+    }
 
     // Comment out below to enable publishing properly
     debugMode = true
@@ -115,7 +101,8 @@ publishing {
     }
 }
 
-tasks.named<DefaultTask>("publish").configure {
+tasks.named<DefaultTask>("publish") {
     finalizedBy("modrinth")
     finalizedBy("publishToCurseForge")
 }
+//</editor-fold>

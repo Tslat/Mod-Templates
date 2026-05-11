@@ -1,8 +1,3 @@
-import gradle.kotlin.dsl.accessors._56ae14ed12f4d69282ac7815d586e32b.idea
-import gradle.kotlin.dsl.accessors._56ae14ed12f4d69282ac7815d586e32b.java
-import gradle.kotlin.dsl.accessors._56ae14ed12f4d69282ac7815d586e32b.publishing
-import gradle.kotlin.dsl.accessors._56ae14ed12f4d69282ac7815d586e32b.versionCatalogs
-
 plugins {
     java
     `maven-publish`
@@ -29,22 +24,53 @@ idea {
     }
 }
 
+eclipse {
+    classpath {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
+}
+
 tasks.withType<JavaCompile>().configureEach {
     this.options.encoding = "UTF-8"
     this.options.release.set(java.toolchain.languageVersion.get().asInt())
 }
 
-val modId: String by project
-val modDisplayName: String by project
-val modAuthors: String by project
-val modLicense: String by project
-val modDescription: String by project
-val modHomepage: String by project
-val modIssuesTracker: String by project
-val modGitRepo: String by project
+val modId               : String by project
+val modDisplayName      : String by project
+val modAuthors          : String by project
+val modLicense          : String by project
+val modDescription      : String by project
+val modHomepage         : String by project
+val modIssuesTracker    : String by project
+val modGitRepo          : String by project
 
 base {
     archivesName = "$modId-${project.name}-${getVersion("minecraft")}"
+}
+
+tasks.withType<Test>().configureEach {
+    failOnNoDiscoveredTests = false
+}
+
+tasks.named<JavaCompile>("compileJava") {
+    if (project != project(":common"))
+        source(project(":common").sourceSets.main.get().allSource)
+}
+
+tasks.named<Jar>("sourcesJar") {
+    if (project != project(":common"))
+        from(project(":common").sourceSets.main.get().allSource)
+}
+
+tasks.withType<Javadoc>().configureEach {
+    if (project != project(":common"))
+        source(project(":common").sourceSets.main.get().allJava)
+}
+
+tasks.withType<ProcessResources>().configureEach {
+    if (project != project(":common"))
+        from(project(":common").sourceSets.main.get().resources)
 }
 
 tasks.withType<Jar>().configureEach {

@@ -1,3 +1,4 @@
+import net.darkhax.curseforgegradle.Constants
 import net.fabricmc.loom.task.RemapJarTask
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import org.gradle.internal.extensions.stdlib.capitalized
@@ -23,16 +24,12 @@ dependencies {
     compileOnly(project(":common"))
 
     // Mod Dependencies below
-    //modImplementation(modDeps.geckolib.fabric)
+    //modImplementation(libs.geckolib.fabric)
 
 }
 
 loom {
-    file("src/main/resources/$modId.accesswidener").takeIf { it.exists() }?.let {
-        accessWidenerPath.set(it)
-    }
-
-    mixin.defaultRefmapName.set("${modId}.refmap.json")
+    file("src/main/resources/$modId.classtweaker").takeIf { it.exists() }?.let(accessWidenerPath::set)
 
     runs {
         configureEach {
@@ -52,33 +49,21 @@ loom {
     }
 }
 
-tasks.withType<JavaCompile>().configureEach {
-    source(project(":common").sourceSets.main.get().allSource)
-}
-
-tasks.named<Jar>("sourcesJar").configure {
-    from(project(":common").sourceSets.main.get().allSource)
-}
-
-tasks.withType<Javadoc>().configureEach {
-    source(project(":common").sourceSets.main.get().allJava)
-}
-
 tasks.withType<ProcessResources>().configureEach {
-   from(project(":common").sourceSets.main.get().resources)
     exclude("**/accesstransformer-common.cfg")
 }
 
+//<editor-fold defaultstate="collapsed" desc="<Publishing>">
 // Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
-    projectId.set(properties["modrinthProjectId"] as String)
-    versionNumber.set(project.version.toString())
-    versionName = "Fabric ${libs.versions.minecraft.asProvider().get()}"
     uploadFile.set(tasks.named<RemapJarTask>("remapJar"))
-    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
+    projectId.set(properties["modrinthProjectId"] as String)
+    versionName = "Fabric ${libs.versions.minecraft.asProvider().get()}"
     versionType = "release"
     loaders.set(listOf("fabric"))
+    versionNumber.set(project.version.toString())
+    gameVersions.set(listOf(libs.versions.minecraft.asProvider().get()))
     dependencies {
         required.project("fabric-api")
     }
@@ -98,13 +83,18 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
     val mainFile = upload(properties["curseforgeProjectId"], tasks.remapJar)
+    mainFile.displayName = "${properties["modDisplayName"]} Fabric ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("Fabric")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
     mainFile.addJavaVersion("Java ${libs.versions.java.get()}")
+    mainFile.addRelation("fabric-api", Constants.RELATION_REQUIRED)
+    mainFile.addEnvironment("Client", "Server")
 
-    if (rootProject.file("CHANGELOG.md").exists())
+    if (rootProject.file("CHANGELOG.md").exists()) {
         mainFile.changelog = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+        mainFile.changelogType = "markdown"
+    }
 
     // Comment out below to enable publishing properly
     debugMode = true
@@ -121,7 +111,8 @@ publishing {
     }
 }
 
-tasks.named<DefaultTask>("publish").configure {
+tasks.named<DefaultTask>("publish") {
     finalizedBy("modrinth")
     finalizedBy("publishToCurseForge")
 }
+//</editor-fold>

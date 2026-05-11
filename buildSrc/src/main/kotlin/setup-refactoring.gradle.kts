@@ -22,7 +22,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
         return@Action
     }
 
-    if (project.properties["group"] == "com.github.myname") {
+    if (project.properties["group"] == "io.github.myname") {
         logger.lifecycle("Skipping setup refactor, group hasn't been set in gradle.properties")
 
         return@Action
@@ -56,7 +56,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
             if (project == null)
                 continue
 
-            var dir = project.projectDir.resolve("src/main/java/com/github/myname/mymod")
+            var dir = project.projectDir.resolve("src/main/java/io/github/myname/mymod")
 
             delete(dir)
 
@@ -67,7 +67,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
                 dir = dir.parentFile
             }
 
-            delete(project.projectDir.resolve("src/main/resources/META-INF/services/com.github.myname.mymod.platform.PlatformHelper").path)
+            delete(project.projectDir.resolve("src/main/resources/META-INF/services/io.github.myname.mymod.platform.PlatformHelper").path)
         }
 
         val commonProject = findProject(":common")
@@ -112,7 +112,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
             delete(fabricProject.projectDir.resolve("src/main/resources/$modId.accesswidener").path)
 
             fabricProject.projectDir.resolve("src/main/resources/fabric.mod.json").takeIf(File::exists)?.let {
-                it.writeText(it.readText().replaceFirst("$group.$modId", "com.github.myname.mymod"))
+                it.writeText(it.readText().replaceFirst("$group.$modId", "io.github.myname.mymod"))
             }
         }
     }
@@ -140,10 +140,10 @@ private fun refactorModule(module: String): Boolean {
  * Refactor the <code>src/main/java/</code> sources for a given module
  */
 private fun refactorModuleSources(root: File, module: String, group: String, newPackage: String): Boolean {
-    return root.resolve("com/github/myname/mymod").takeIf(File::exists)?.let {
+    return root.resolve("io/github/myname/mymod").takeIf(File::exists)?.let {
         return@let copy {
             from(it).filter { it ->
-                var line = it.replace("com.github.myname.mymod", "$group.$modId")
+                var line = it.replace("io.github.myname.mymod", "$group.$modId")
 
                 if (module == "common")
                     line = line.replaceFirst("String MODID = \"mymod\"", "String MODID = \"$modId\"")
@@ -162,13 +162,13 @@ private fun refactorModuleSources(root: File, module: String, group: String, new
 private fun refactorModuleResources(root: File, module: String, group: String): Boolean {
     var copied = true
 
-    root.resolve("META-INF/services/com.github.myname.mymod.platform.PlatformHelper").takeIf(File::exists)?.let {
+    root.resolve("META-INF/services/io.github.myname.mymod.platform.PlatformHelper").takeIf(File::exists)?.let {
         copied = copy {
             from(it).filter { it ->
-                it.replace("com.github.myname.mymod", "$group.$modId")
+                it.replace("io.github.myname.mymod", "$group.$modId")
             }
             into(root.resolve("META-INF/services/"))
-            rename("com.github.myname.mymod.platform.PlatformHelper", "$group.$modId.platform.PlatformHelper")
+            rename("io.github.myname.mymod.platform.PlatformHelper", "$group.$modId.platform.PlatformHelper")
         }.didWork
     }
 
@@ -195,7 +195,7 @@ private fun refactorModuleResources(root: File, module: String, group: String): 
             root.resolve("mymod.mixins.json").takeIf(File::exists)?.let {
                 copied = copy {
                     from(it).filter { it ->
-                        it.replace("com.github.myname.mymod", "$group.$modId")
+                        it.replace("io.github.myname.mymod", "$group.$modId")
                             .replaceFirst("mymod.refmap.json", "$modId.refmap.json")
                     }
 
@@ -218,7 +218,7 @@ private fun refactorModuleResources(root: File, module: String, group: String): 
 
         if (copied) {
             root.resolve("fabric.mod.json").takeIf(File::exists)?.let {
-                it.writeText(it.readText().replaceFirst("com.github.myname.mymod", "$group.$modId"))
+                it.writeText(it.readText().replaceFirst("io.github.myname.mymod", "$group.$modId"))
             }
         }
     }
@@ -257,7 +257,7 @@ private fun isInitialUnmodifiedSetup(): Boolean {
     for (module in arrayOf("common", "fabric", "forge", "neoforge")) {
         val project = findProject(":$module")
 
-        if (project != null && !project.projectDir.resolve("src/main/java/com/github/myname/mymod").exists())
+        if (project != null && !project.projectDir.resolve("src/main/java/io/github/myname/mymod").exists())
             return false
     }
 
@@ -282,7 +282,7 @@ private fun isInitialUnmodifiedSetup(): Boolean {
             return false
     }
 
-    return commonProject == null || commonProject.projectDir.resolve("src/main/java/com/github/myname/mymod/ModConstants.java").takeIf { it.exists() }?.let { it ->
+    return commonProject == null || commonProject.projectDir.resolve("src/main/java/io/github/myname/mymod/ModConstants.java").takeIf { it.exists() }?.let { it ->
         return@let it.readText().contains("MODID = \"mymod\"")
     }?: false
 }
