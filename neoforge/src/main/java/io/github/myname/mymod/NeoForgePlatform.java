@@ -16,7 +16,7 @@ public final class NeoForgePlatform implements PlatformHelper {
     }
 
     @Override
-    public <T extends Entity> Supplier<EntityType<T>> registerEntity(String id, Supplier<EntityType<T>> entityType) {
+    public <T extends Entity> Supplier<EntityType<T>> registerEntityType(String id, Supplier<EntityType<T>> entityType) {
         return ModMain.ENTITY_REGISTRY.register(id, entityType);
     }
 

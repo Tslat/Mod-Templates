@@ -21,7 +21,7 @@ public final class FabricPlatform implements PlatformHelper {
     }
 
     @Override
-    public <T extends Entity> Supplier<EntityType<T>> registerEntity(String id, Supplier<EntityType<T>> entityType) {
+    public <T extends Entity> Supplier<EntityType<T>> registerEntityType(String id, Supplier<EntityType<T>> entityType) {
         final EntityType<T> registeredEntity = Registry.register(BuiltInRegistries.ENTITY_TYPE, ModConstants.id(id), entityType.get());
 
         return () -> registeredEntity;

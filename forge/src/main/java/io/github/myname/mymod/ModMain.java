@@ -14,13 +14,13 @@ import net.minecraftforge.registries.DeferredRegister;
 @Mod(ModConstants.MODID)
 public final class ModMain {
     public static final DeferredRegister<Item> ITEM_REGISTRY = DeferredRegister.create(Registries.ITEM, ModConstants.MODID);
-    public static final DeferredRegister<EntityType<?>> ENTITY_REGISTRY = DeferredRegister.create(Registries.ENTITY_TYPE, ModConstants.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPE_REGISTRY = DeferredRegister.create(Registries.ENTITY_TYPE, ModConstants.MODID);
 
     public ModMain(FMLJavaModLoadingContext context) {
         final BusGroup busGroup = context.getModBusGroup();
 
         ITEM_REGISTRY.register(busGroup);
-        ENTITY_REGISTRY.register(busGroup);
+        ENTITY_TYPE_REGISTRY.register(busGroup);
 
         EntityAttributeCreationEvent.BUS.addListener(event -> ModEntities.registerEntityAttributes(event::put));
         ModCommon.init();

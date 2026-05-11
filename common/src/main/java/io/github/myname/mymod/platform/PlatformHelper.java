@@ -13,7 +13,7 @@ public interface PlatformHelper {
     <T extends Item> Supplier<T> registerItem(String id, Supplier<T> item);
 
     /// Register a new entity
-    <T extends Entity> Supplier<EntityType<T>> registerEntity(String id, Supplier<EntityType<T>> entityType);
+    <T extends Entity> Supplier<EntityType<T>> registerEntityType(String id, Supplier<EntityType<T>> entityType);
 
     /// Create a new [CreativeModeTab.Builder] instance, patched by the modloader
     CreativeModeTab.Builder newCreativeTabBuilder();

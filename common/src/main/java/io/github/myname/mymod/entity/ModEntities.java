@@ -47,7 +47,7 @@ public final class ModEntities {
 
     /// Register a custom [EntityType]
     private static <T extends Entity> Supplier<EntityType<T>> register(String id, Supplier<EntityType.Builder<T>> entityTypeBuilder) {
-        return ModConstants.PLATFORM.registerEntity(id, () -> entityTypeBuilder.get().build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(ModConstants.MODID, id))));
+        return ModConstants.PLATFORM.registerEntityType(id, () -> entityTypeBuilder.get().build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(ModConstants.MODID, id))));
     }
     //</editor-fold>
 }

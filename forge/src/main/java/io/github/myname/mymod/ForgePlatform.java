@@ -16,8 +16,8 @@ public final class ForgePlatform implements PlatformHelper {
     }
 
     @Override
-    public <T extends Entity> Supplier<EntityType<T>> registerEntity(String id, Supplier<EntityType<T>> entityType) {
-        return ModMain.ENTITY_REGISTRY.register(id, entityType);
+    public <T extends Entity> Supplier<EntityType<T>> registerEntityType(String id, Supplier<EntityType<T>> entityType) {
+        return ModMain.ENTITY_TYPE_REGISTRY.register(id, entityType);
     }
 
     @Override
