@@ -218,7 +218,7 @@ private fun refactorModuleResources(root: File, module: String, group: String): 
 
         if (copied) {
             root.resolve("fabric.mod.json").takeIf(File::exists)?.let {
-                it.writeText(it.readText().replaceFirst("io.github.myname.mymod", "$group.$modId"))
+                it.writeText(it.readText().replace("io.github.myname.mymod", "$group.$modId"))
             }
         }
     }
