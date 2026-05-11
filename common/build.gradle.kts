@@ -21,6 +21,7 @@ neoForge {
 dependencies {
     compileOnly(libs.mixin)
     compileOnly(libs.mixinextras.common)
+    compileOnly(libs.jspecify)
 
     // Mod Dependencies below
     //implementation(libs.geckolib.common)

@@ -41,6 +41,7 @@ neoForge {
 
 dependencies {
     compileOnly(project(":common"))
+    implementation(libs.jspecify)
 
     // Mod Dependencies below
     //implementation(libs.geckolib.neoforge)

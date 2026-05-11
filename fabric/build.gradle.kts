@@ -21,6 +21,7 @@ dependencies {
     })
     modImplementation(libs.fabric)
     modImplementation(libs.fabric.api)
+    implementation(libs.jspecify)
     compileOnly(project(":common"))
 
     // Mod Dependencies below
