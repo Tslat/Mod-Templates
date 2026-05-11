@@ -11,11 +11,10 @@ plugins {
     alias(libs.plugins.forge.at)
 }
 
-val modId           : String by project
-val modDisplayName  : String by project
+val modId: String by project
 
 jarJar.register {
-    archiveClassifier.set("")
+    archiveClassifier = null
 }
 
 minecraft {
@@ -40,22 +39,11 @@ minecraft {
 }
 
 repositories {
-    maven(minecraft.mavenizer)
+    @Suppress("DEPRECATION")
+    minecraft.mavenizer(this@repositories)
     maven(fg.forgeMaven)
     maven(fg.minecraftLibsMaven)
-    exclusiveContent {
-        forRepository {
-            maven {
-                name = "Sponge"
-                url = uri("https://repo.spongepowered.org/repository/maven-public")
-            }
-        }
-        filter {
-            includeGroupAndSubgroups("org.spongepowered")
-        }
-    }
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
@@ -76,10 +64,6 @@ dependencies {
 
 tasks.named<Jar>("jar").configure {
     archiveClassifier.set("slim")
-}
-
-tasks.named<DefaultTask>("assemble").configure {
-    dependsOn("jarJar")
 }
 
 //<editor-fold defaultstate="collapsed" desc="<Publishing>">
@@ -109,7 +93,7 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
     val mainFile = upload(properties["curseforgeProjectId"], tasks.named<JarJar>("jarJar"))
-    mainFile.displayName = "$modDisplayName Forge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
+    mainFile.displayName = "${properties["modDisplayName"]} Forge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("Forge")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())

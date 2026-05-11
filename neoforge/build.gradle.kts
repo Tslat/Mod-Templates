@@ -9,8 +9,7 @@ plugins {
     alias(libs.plugins.moddevgradle)
 }
 
-val modId           : String by project
-val modDisplayName  : String by project
+val modId: String by project
 
 neoForge {
     version = libs.versions.neoforge.asProvider().get()
@@ -76,7 +75,7 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
     val mainFile = upload(properties["curseforgeProjectId"], tasks.jar)
-    mainFile.displayName = "$modDisplayName NeoForge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
+    mainFile.displayName = "${properties["modDisplayName"]} NeoForge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("NeoForge")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
