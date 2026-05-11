@@ -94,10 +94,6 @@ tasks.named<Jar>("jar") {
     archiveClassifier.set("slim")
 }
 
-tasks.named<JarJar>("jarJar") {
-    archiveClassifier.set(null)
-}
-
 tasks.withType<ProcessResources>() {
     exclude("**/accesstransformer-common.cfg")
 }
