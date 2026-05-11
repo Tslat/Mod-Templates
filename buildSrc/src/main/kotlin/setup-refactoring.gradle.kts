@@ -59,7 +59,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
             if (project == null)
                 continue
 
-            var dir = project.projectDir.resolve("src/main/java/com/github/myname/mymod")
+            var dir = project.projectDir.resolve("src/main/java/io/github/myname/mymod")
 
             delete(dir)
 
@@ -143,7 +143,7 @@ private fun refactorModule(module: String): Boolean {
  * Refactor the <code>src/main/java/</code> sources for a given module
  */
 private fun refactorModuleSources(root: File, module: String, group: String, newPackage: String): Boolean {
-    return root.resolve("com/github/myname/mymod").takeIf(File::exists)?.let {
+    return root.resolve("io/github/myname/mymod").takeIf(File::exists)?.let {
         return@let copy {
             from(it).filter { it ->
                 var line = it.replace("io.github.myname.mymod", "$group.$modId")
@@ -275,7 +275,7 @@ private fun isInitialUnmodifiedSetup(): Boolean {
     for (module in arrayOf("common", "fabric", "forge", "neoforge")) {
         val project = findProject(":$module")
 
-        if (project != null && !project.projectDir.resolve("src/main/java/com/github/myname/mymod").exists())
+        if (project != null && !project.projectDir.resolve("src/main/java/io/github/myname/mymod").exists())
             return false
     }
 
@@ -300,7 +300,7 @@ private fun isInitialUnmodifiedSetup(): Boolean {
             return false
     }
 
-    return commonProject == null || commonProject.projectDir.resolve("src/main/java/com/github/myname/mymod/ModConstants.java").takeIf { it.exists() }?.let { it ->
+    return commonProject == null || commonProject.projectDir.resolve("src/main/java/io/github/myname/mymod/ModConstants.java").takeIf { it.exists() }?.let { it ->
         return@let it.readText().contains("MODID = \"mymod\"")
     }?: false
 }
