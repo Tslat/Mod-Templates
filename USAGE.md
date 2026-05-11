@@ -1,7 +1,7 @@
 # Usage Instructions
 
 ## Adding Dependencies
-1. Add your dependency version in the [`dependencies.versions.toml`](gradle/dependencies.versions.toml) file.<br>
+1. Add your dependency version in the [`libs.versions.toml`](gradle/libs.versions.toml) file.<br>
     See the existing `geckolib` version for an example
 2. Add your repository in the [`repositories.gradle.kts`](buildSrc/src/main/kotlin/repositories.gradle.kts) file<br>
     Examples have been provided for your use
