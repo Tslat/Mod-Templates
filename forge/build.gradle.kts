@@ -32,6 +32,8 @@ renamer {
 }
 
 minecraft {
+    useDefaultAccessTransformer()
+
     runs {
         configureEach {
             workingDir.convention(layout.projectDirectory.dir("runs/${name}"))
@@ -65,21 +67,17 @@ repositories {
 
 dependencies {
     implementation(minecraft.dependency(libs.forge))
-    compileOnly(project(":common")) {
-        rootProject.file("common/src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
-            accessTransformers.configure(this) {
-                config.set(it)
-            }
-        }
-    }
+    compileOnly(project(":common"))
 
-    annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
     compileOnly(libs.mixinextras.common)
-    annotationProcessor(libs.mixinextras.common)
     testCompileOnly(libs.mixinextras.common)
     runtimeOnly(libs.mixinextras.forge)
     implementation(libs.jopt.simple)
     implementation(libs.jspecify)
+
+    annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
+    annotationProcessor(libs.mixinextras.common)
+    //annotationProcessor(libs.forge.eventbusvalidator)
 
     "jarJar"(libs.mixinextras.forge)
 
@@ -127,7 +125,7 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     mainFile.releaseType = "release"
     mainFile.addModLoader("Forge")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
-    mainFile.addJavaVersion("Java ${libs.versions.java}")
+    mainFile.addJavaVersion("Java ${libs.versions.java.get()}")
     mainFile.addEnvironment("Client", "Server")
 
     if (rootProject.file("CHANGELOG.md").exists()) {
