@@ -22,7 +22,7 @@
     forge-mc                        = "26.1-62.0.1"
     forge-fml-range                 = "[62.0.1,)"
     forge-range                     = "[62.0.1,)"
-    forge-eventbusvalidator         = "7.0-beta.15"
+    forge-eventbusvalidator         = "7.0.5"
 
 # Neoforge
     neoforge-loader-range           = "[5,)"
