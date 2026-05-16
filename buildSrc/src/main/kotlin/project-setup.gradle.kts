@@ -82,8 +82,7 @@ tasks.withType<Jar>().configureEach {
             "Implementation-Title"    to modDisplayName,
             "Implementation-Version"  to getVersion("mod"),
             "Implementation-Vendor"   to modAuthors,
-            "Built-On-Minecraft"      to getVersion("minecraft"),
-            "MixinConfigs"            to "$modId.mixins.json"
+            "Built-On-Minecraft"      to getVersion("minecraft")
         ))
     }
 }
