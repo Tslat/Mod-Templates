@@ -18,6 +18,10 @@ jarJar.register {
 }
 
 minecraft {
+    rootProject.file("common/src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
+        accessTransformers.setFrom(it)
+    }
+
     runs {
         configureEach {
             workingDir.convention(layout.projectDirectory.dir("runs/${name}"))
@@ -48,13 +52,7 @@ repositories {
 
 dependencies {
     implementation(minecraft.dependency(libs.forge))
-    compileOnly(project(":common")) {
-        rootProject.file("common/src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
-            accessTransformers.configure(this) {
-                config.set(it)
-            }
-        }
-    }
+    compileOnly(project(":common"))
 
     annotationProcessor(libs.forge.eventbusvalidator)
 
