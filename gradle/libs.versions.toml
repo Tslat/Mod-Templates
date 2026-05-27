@@ -47,7 +47,6 @@
     plugin-curseforge-gradle        = "1.1.28"
     plugin-idea-ext                 = "1.4.1"
     plugin-forge-gradle             = "[7.0.25,8.0)"
-    plugin-forge-at                 = "[5.0.3,)"
     plugin-forge-jarjar             = "[0.2.3,)"
     plugin-forge-renamer            = "[1.0.19,)"
     plugin-mixin                    = "0.7.+"
@@ -88,7 +87,6 @@
 # Platform
     moddevgradle            = { id = "net.neoforged.moddev",                    version.ref = "plugin-moddevgradle" }
     forgegradle             = { id = "net.minecraftforge.gradle",               version.ref = "plugin-forge-gradle" }
-    forge-at                = { id = "net.minecraftforge.accesstransformers",   version.ref = "plugin-forge-at" }
     forge-jarjar            = { id = "net.minecraftforge.jarjar",               version.ref = "plugin-forge-jarjar" }
     forge-renamer           = { id = "net.minecraftforge.renamer",              version.ref = "plugin-forge-renamer" }
     loom                    = { id = "fabric-loom",                             version.ref = "plugin-loom" }

@@ -9,7 +9,6 @@ plugins {
     alias(libs.plugins.curseforgegradle)
     alias(libs.plugins.forgegradle)
     alias(libs.plugins.forge.jarjar)
-    alias(libs.plugins.forge.at)
     alias(libs.plugins.forge.renamer)
 }
 
