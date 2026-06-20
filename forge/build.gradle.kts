@@ -23,11 +23,6 @@ minecraft {
         configureEach {
             workingDir.convention(layout.projectDirectory.dir("runs/${name}"))
             systemProperty("forge.logging.console.level", "debug")
-
-            /*mods.create(modId) {
-                source(sourceSets.main.get())
-                source(project(":common").sourceSets.main.get())
-            }*/
         }
 
         register("client") {
