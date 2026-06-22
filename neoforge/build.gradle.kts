@@ -13,7 +13,7 @@ val modId: String by project
 neoForge {
     version = libs.versions.neoforge.asProvider().get()
 
-    project(":common").file("src/main/resources/META-INF/accesstransformer-common.cfg").takeIf { it.exists() }?.let {
+    project(":common").file("src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
         accessTransformers.files.setFrom(it)
         validateAccessTransformers = true
     }

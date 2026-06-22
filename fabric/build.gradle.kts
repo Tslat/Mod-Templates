@@ -51,7 +51,7 @@ loom {
 }
 
 tasks.withType<ProcessResources>().configureEach {
-    exclude("**/accesstransformer-common.cfg")
+    exclude("**/accesstransformer.cfg")
 }
 
 //<editor-fold defaultstate="collapsed" desc="<Publishing>">

@@ -17,7 +17,9 @@ jarJar.register {
 }
 
 minecraft {
-    useDefaultAccessTransformer()
+    rootProject.file("common/src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
+        accessTransformers.setFrom(it)
+    }
 
     runs {
         configureEach {
@@ -55,7 +57,6 @@ dependencies {
     implementation(libs.jopt.simple)
     implementation(libs.jspecify)
 
-    annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
     annotationProcessor(libs.mixinextras.common)
     //annotationProcessor(libs.forge.eventbusvalidator)
 
@@ -68,10 +69,6 @@ dependencies {
 
 tasks.named<Jar>("jar") {
     archiveClassifier.set("slim")
-}
-
-tasks.withType<ProcessResources>() {
-    exclude("**/accesstransformer-common.cfg")
 }
 
 // Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
