@@ -11,7 +11,7 @@ plugins {
     alias(libs.plugins.loom)
 }
 
-val modId: String by project
+val modId = project.property("modId") as String
 
 dependencies {
     minecraft(libs.minecraft)
@@ -34,9 +34,9 @@ loom {
 
     runs {
         configureEach {
-            runDir("runs/$name")
-            ideConfigGenerated(true)
-            configName = "Fabric ${name.capitalized()}"
+            displayName.set("Fabric ${name.capitalized()}")
+            runDirectory.set(project.file("runs/$name"))
+            generateRunConfig.set(true)
         }
 
         named("client") {
@@ -59,7 +59,7 @@ tasks.withType<ProcessResources>().configureEach {
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
     uploadFile.set(tasks.named<RemapJarTask>("remapJar"))
-    projectId.set(properties["modrinthProjectId"] as String)
+    projectId.set(project.property("modrinthProjectId") as String)
     versionName = "Fabric ${libs.versions.minecraft.asProvider().get()}"
     versionType = "release"
     loaders.set(listOf("fabric"))
@@ -83,8 +83,8 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     group = "publishing"
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
-    val mainFile = upload(properties["curseforgeProjectId"], tasks.remapJar)
-    mainFile.displayName = "${properties["modDisplayName"]} Fabric ${libs.versions.minecraft.asProvider().get()} ${project.version}"
+    val mainFile = upload(project.property("curseforgeProjectId"), tasks.remapJar)
+    mainFile.displayName = "${project.property("modDisplayName")} Fabric ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("Fabric")
     mainFile.addGameVersion(libs.versions.minecraft.asProvider().get())
