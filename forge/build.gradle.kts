@@ -86,7 +86,7 @@ mixin {
 // Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
-    uploadFile.set(tasks.named("jarJar"))
+    uploadFile.set(tasks.named("reobfJar"))
     projectId.set(project.property("modrinthProjectId") as String)
     versionName = "Forge ${libs.versions.minecraft.asProvider().get()}"
     loaders.set(listOf("forge"))
@@ -107,7 +107,7 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     group = "publishing"
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
-    val mainFile = upload(project.property("curseforgeProjectId"), tasks.named("jarJar"))
+    val mainFile = upload(project.property("curseforgeProjectId"), tasks.named("reobfJar"))
     mainFile.displayName = "${project.property("modDisplayName")} Forge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("Forge")
@@ -131,7 +131,7 @@ publishing {
         publications {
             create<MavenPublication>(modId) {
                 artifactId = base.archivesName.get()
-               artifact(tasks.named("jarJar"))
+               artifact(tasks.named("reobfJar"))
                artifact(tasks.named("sourcesJar"))
             }
         }
