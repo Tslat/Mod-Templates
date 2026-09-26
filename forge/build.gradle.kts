@@ -66,6 +66,18 @@ dependencies {
 
 }
 
+tasks.jar {
+    finalizedBy("reobfJar")
+}
+
+tasks.publish {
+    dependsOn("reobfJar")
+}
+
+tasks.processResources {
+    exclude("**/*.accesswidener")
+}
+
 mixin {
     add(project.sourceSets.getByName("main"), "$modId.refmap.json")
     config("$modId.mixins.json")
@@ -74,7 +86,7 @@ mixin {
 // Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
-    uploadFile.set(tasks.getByName("jarJar"))
+    uploadFile.set(tasks.named("jarJar"))
     projectId.set(project.property("modrinthProjectId") as String)
     versionName = "Forge ${libs.versions.minecraft.asProvider().get()}"
     loaders.set(listOf("forge"))
@@ -95,7 +107,7 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     group = "publishing"
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
-    val mainFile = upload(project.property("curseforgeProjectId"), tasks.getByName("jarJar"))
+    val mainFile = upload(project.property("curseforgeProjectId"), tasks.named("jarJar"))
     mainFile.displayName = "${project.property("modDisplayName")} Forge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("Forge")
@@ -119,8 +131,8 @@ publishing {
         publications {
             create<MavenPublication>(modId) {
                 artifactId = base.archivesName.get()
-               //artifact(components.getByName("jarJar"))
-               //artifact(components.getByName("sourcesJar"))
+               artifact(tasks.named("jarJar"))
+               artifact(tasks.named("sourcesJar"))
             }
         }
     }
@@ -132,7 +144,7 @@ tasks.named<DefaultTask>("publish") {
 }
 
 sourceSets.forEach {
-    val dir = layout.buildDirectory.dir("sourcesSets/${it}.name")
+    val dir = layout.buildDirectory.dir("sourcesSets/${it.name}")
 
     it.output.setResourcesDir(dir)
     it.java.destinationDirectory = dir
