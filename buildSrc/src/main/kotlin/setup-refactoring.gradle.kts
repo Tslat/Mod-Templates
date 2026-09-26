@@ -1,8 +1,7 @@
 import org.gradle.internal.file.FileException
-import java.nio.file.DirectoryStream
 import java.nio.file.Files
 
-val modId: String by project
+val modId = project.property("modId") as String
 
 /**
  * Create a task for refactoring the project when initially created, automatically handling
@@ -22,7 +21,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
         return@Action
     }
 
-    if (project.properties["group"] == "io.github.myname") {
+    if (project.property("group") == "io.github.myname") {
         logger.lifecycle("Skipping setup refactor, group hasn't been set in gradle.properties")
 
         return@Action
@@ -80,13 +79,13 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
         }
 
         if (fabricProject != null)
-            delete(fabricProject.projectDir.resolve("src/main/resources/mymod.classtweaker").path)
+            delete(fabricProject.projectDir.resolve("src/main/resources/mymod.accesswidener").path)
     }
     else {
         // Remove newly created directories
         logger.error("Failed to perform setup refactor, cleaning up")
 
-        val group = project.properties["group"] as String
+        val group = project.property("group") as String
         val newPackage = group.replace(".", "/")
 
         for (module in arrayOf("common", "fabric", "forge", "neoforge")) {
@@ -109,7 +108,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
         }
 
         if (fabricProject != null) {
-            delete(fabricProject.projectDir.resolve("src/main/resources/$modId.classtweaker").path)
+            delete(fabricProject.projectDir.resolve("src/main/resources/$modId.accesswidener").path)
 
             fabricProject.projectDir.resolve("src/main/resources/fabric.mod.json").takeIf(File::exists)?.let {
                 it.writeText(it.readText().replaceFirst("$group.$modId", "io.github.myname.mymod"))
@@ -122,7 +121,7 @@ tasks.register("refactorOnInitialSetup", Action<Task> {
  * Refactor a given module's contents using the new modId
  */
 private fun refactorModule(module: String): Boolean {
-    val group = project.properties["group"] as String
+    val group = project.property("group") as String
     val newPackage = group.replace(".", "/")
     val project = findProject(":$module")
 
@@ -207,7 +206,7 @@ private fun refactorModuleResources(root: File, module: String, group: String): 
     }
     else if (module == "fabric") {
         if (copied) {
-            root.resolve("mymod.classtweaker").takeIf(File::exists)?.let {
+            root.resolve("mymod.accesswidener").takeIf(File::exists)?.let {
                 copied = copy {
                     from(it)
                     into(root)
@@ -265,8 +264,8 @@ private fun isInitialUnmodifiedSetup(): Boolean {
 
     if (commonProject != null) {
         for (path in arrayOf(
-            "src/main/resources/assets/mymod", "src/main/resources/assets/mymod",
-            "src/main/resources/data/mymod", "src/main/resources/mymod.mixins.json")) {
+            "src/main/resources/assets/mymod", "src/main/resources/data/mymod",
+            "src/main/resources/mymod.mixins.json", "src/main/resources/mymod.accesswidener")) {
             if (!commonProject.projectDir.resolve(path).exists())
                 return false
         }
@@ -276,9 +275,6 @@ private fun isInitialUnmodifiedSetup(): Boolean {
 
     if (fabricProject != null) {
         if (!fabricProject.projectDir.resolve("src/main/resources/fabric.mod.json").exists())
-            return false
-
-        if (!fabricProject.projectDir.resolve("src/main/resources/mymod.classtweaker").exists())
             return false
     }
 

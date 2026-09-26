@@ -30,7 +30,7 @@ dependencies {
 }
 
 loom {
-    file("src/main/resources/$modId.classtweaker").takeIf { it.exists() }?.let(accessWidenerPath::set)
+    project(":common").file("src/main/resources/$modId.classtweaker").takeIf { it.exists() }?.let(accessWidenerPath::set)
 
     runs {
         configureEach {
