@@ -5,6 +5,7 @@
 *.gradle text eol=crlf
 *.cfg text eol=lf
 *.png binary
+*.webp binary
 *.gif binary
 *.exe binary
 *.dll binary
@@ -14,3 +15,4 @@
 *.pyd binary
 *.jks binary
 *.ogg binary
+*.mp3 binary

@@ -6,7 +6,7 @@
     mod                             = "1.0.0"
 
 # Dependencies
-    #geckolib                       = "4.8.4"
+    #geckolib                       = "4.9.3"
 
 # Common
     minecraft-range                 = "[1.21,)"
