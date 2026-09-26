@@ -1,80 +1,80 @@
-import net.minecraftforge.jarjar.gradle.JarJar
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import net.neoforged.moddevgradle.dsl.RunModel
+import org.slf4j.event.Level
 
 plugins {
     id("project-setup")
 
     alias(libs.plugins.minotaur)
     alias(libs.plugins.curseforgegradle)
-    alias(libs.plugins.forgegradle)
-    alias(libs.plugins.forge.jarjar)
+    alias(libs.plugins.moddevgradle)
 }
 
 val modId = project.property("modId") as String
 
-jarJar.register {
-    archiveClassifier = null
-}
+legacyForge {
+    setVersion(libs.versions.moddevgradle.forge.get())
 
-minecraft {
+    parchment.minecraftVersion.set(libs.versions.parchment.minecraft.get())
+    parchment.mappingsVersion.set(libs.versions.parchment.asProvider().get())
+
     rootProject.file("common/src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
-        accessTransformers.setFrom(it)
+        accessTransformers.from(it)
     }
 
     runs {
+        val modModel = mods.create(modId)
+
+        modModel.sourceSet(project.sourceSets.getByName("main"))
+
         configureEach {
-            workingDir.convention(layout.projectDirectory.dir("runs/${name}"))
-            systemProperty("forge.logging.console.level", "debug")
+            logLevel = Level.DEBUG
         }
 
-        register("client") {
-            args("--username", "Dev")
+        runConfig(this, "client") {
+            client()
+            programArguments.addAll("--username", "Dev")
         }
 
-        register("client2") {
-            args("--username", "Dev2")
+        runConfig(this, "client2") {
+            client()
+            programArguments.addAll("--username", "Dev2")
         }
 
-        register("server")
+        runConfig(this, "server") {
+            server()
+            programArgument("--nogui")
+        }
     }
 }
 
-repositories {
-    @Suppress("DEPRECATION")
-    minecraft.mavenizer(this@repositories)
-    maven(fg.forgeMaven)
-    maven(fg.minecraftLibsMaven)
-    mavenCentral()
-}
-
 dependencies {
-    implementation(minecraft.dependency(libs.forge))
     compileOnly(project(":common"))
-
-    compileOnly(libs.mixinextras.common)
-    testCompileOnly(libs.mixinextras.common)
-    runtimeOnly(libs.mixinextras.forge)
-    implementation(libs.jopt.simple)
     implementation(libs.jspecify)
+    implementation(libs.jopt.simple)
 
+    annotationProcessor("org.spongepowered:mixin:0.8.7:processor")
     annotationProcessor(libs.mixinextras.common)
-    //annotationProcessor(libs.forge.eventbusvalidator)
+    modCompileOnlyApi(libs.mixinextras.common)
+    modApi(libs.mixinextras.forge)
+    modApi("org.jetbrains:annotations:24.0.0")
 
-    "jarJar"(libs.mixinextras.forge)
+    jarJar(libs.mixinextras.forge)
 
     // Mod Dependencies below
-    //implementation(libs.geckolib.forge)
+    //modImplementation(libs.geckolib.forge)
 
 }
 
-tasks.named<Jar>("jar") {
-    archiveClassifier.set("slim")
+mixin {
+    add(project.sourceSets.getByName("main"), "$modId.refmap.json")
+    config("$modId.mixins.json")
 }
 
 // Must have your Modrinth API Key as an environment variable under 'MODRINTH_TOKEN'
 modrinth {
     token = System.getenv("MODRINTH_TOKEN") ?: "Invalid/No API Token Found"
-    uploadFile.set(tasks.named<JarJar>("jarJar"))
+    uploadFile.set(tasks.getByName("jarJar"))
     projectId.set(project.property("modrinthProjectId") as String)
     versionName = "Forge ${libs.versions.minecraft.asProvider().get()}"
     loaders.set(listOf("forge"))
@@ -95,7 +95,7 @@ tasks.register<TaskPublishCurseForge>("publishToCurseForge") {
     group = "publishing"
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: "Invalid/No API Token Found"
 
-    val mainFile = upload(project.property("curseforgeProjectId"), tasks.named<JarJar>("jarJar"))
+    val mainFile = upload(project.property("curseforgeProjectId"), tasks.getByName("jarJar"))
     mainFile.displayName = "${project.property("modDisplayName")} Forge ${libs.versions.minecraft.asProvider().get()} ${project.version}"
     mainFile.releaseType = "release"
     mainFile.addModLoader("Forge")
@@ -118,8 +118,9 @@ publishing {
     publishing {
         publications {
             create<MavenPublication>(modId) {
-                from(components["jarJar"])
                 artifactId = base.archivesName.get()
+               //artifact(components.getByName("jarJar"))
+               //artifact(components.getByName("sourcesJar"))
             }
         }
     }
@@ -135,4 +136,11 @@ sourceSets.forEach {
 
     it.output.setResourcesDir(dir)
     it.java.destinationDirectory = dir
+}
+
+/**
+ * Not explicitly needed; but due to Gradle's failure to provide kotlin-dsl reified types for [NamedDomainObjectContainer], you'll get a bunch of IDE errors without it
+ */
+private fun runConfig(container: NamedDomainObjectContainer<RunModel>, name: String, configuration: Action<RunModel>) {
+    configuration.execute(container.create(name));
 }

@@ -41,7 +41,7 @@ loom {
 
         named("client") {
             client()
-            programArg("--username=Dev")
+            programArguments.add("--username=Dev")
         }
 
         named("server") {

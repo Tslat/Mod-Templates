@@ -27,19 +27,9 @@ public final class ModEntities {
         return register(id, () -> EntityType.Builder.of(factory, category).sized(width, height));
     }
 
-    /// Register a basic [EntityType], additionally specifying a custom eye height
-    private static <T extends Entity> Supplier<EntityType<T>> register(String id, EntityType.EntityFactory<T> factory, MobCategory category, float width, float height, float eyeHeight) {
-        return register(id, () -> EntityType.Builder.of(factory, category).sized(width, height).eyeHeight(eyeHeight));
-    }
-
     /// Register an [EntityType]
     private static <T extends Entity> Supplier<EntityType<T>> register(String id, EntityType.EntityFactory<T> factory, MobCategory category, float width, float height, UnaryOperator<EntityType.Builder<T>> modifier) {
         return register(id, () -> modifier.apply(EntityType.Builder.of(factory, category).sized(width, height)));
-    }
-
-    /// Register an [EntityType]
-    private static <T extends Entity> Supplier<EntityType<T>> register(String id, EntityType.EntityFactory<T> factory, MobCategory category, float width, float height, float eyeHeight, UnaryOperator<EntityType.Builder<T>> modifier) {
-        return register(id, () -> modifier.apply(EntityType.Builder.of(factory, category).sized(width, height).eyeHeight(eyeHeight)));
     }
 
     /// Register a custom [EntityType]

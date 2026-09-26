@@ -113,11 +113,7 @@ tasks.withType<ProcessResources>().configureEach {
         "fabric_api_version"             to getVersion("fabric.api"),
         "fabric_api_version_range"       to getVersion("fabric.api.range"),
         "fabric_loader_version"          to getVersion("fabric"),
-        "fabric_loader_version_range"    to getVersion("fabric.range"),
-
-        "neoforge_version"               to getVersion("neoforge"),
-        "neoforge_version_range"         to getVersion("neoforge.range"),
-        "neoforge_loader_version_range"  to getVersion("neoforge.loader.range")
+        "fabric_loader_version_range"    to getVersion("fabric.range")
     )
 
     val strategy = duplicatesStrategy

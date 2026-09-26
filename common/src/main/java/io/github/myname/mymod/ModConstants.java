@@ -15,7 +15,7 @@ import java.util.ServiceLoader;
 public final class ModConstants {
     public static final String MODID = "mymod";
     public static final Logger LOGGER = LogManager.getLogger(MODID);
-    private static final ResourceLocation BASE_ID = ResourceLocation.fromNamespaceAndPath(MODID, "");
+    private static final ResourceLocation BASE_ID = new ResourceLocation(MODID, "");
 
     public static final PlatformHelper PLATFORM = ServiceLoader.load(PlatformHelper.class).findFirst().orElseThrow();
 

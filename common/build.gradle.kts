@@ -1,21 +1,17 @@
 plugins {
     id("project-setup")
 
-    alias(libs.plugins.moddevgradle)
+    alias(libs.plugins.vanillagradle)
 }
 
-val modId: String by project
+val modId = project.property("modId") as String
 
-neoForge {
-    neoFormVersion = libs.versions.neoform.get()
+minecraft {
+    this.version(libs.versions.minecraft.asProvider().get())
 
-    file("src/main/resources/META-INF/accesstransformer.cfg").takeIf { it.exists() }?.let {
-        accessTransformers.files.setFrom(it.path)
-        validateAccessTransformers = true
+    file("src/main/resources/$modId.accesswidener").takeIf { it.exists() }?.let {
+        accessWideners(it)
     }
-
-    parchment.minecraftVersion.set(libs.versions.parchment.minecraft.get())
-    parchment.mappingsVersion.set(libs.versions.parchment.asProvider().get())
 }
 
 dependencies {
